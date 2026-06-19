@@ -734,6 +734,91 @@ main {
 }
 
 /* ============================================================
+   PRIJZEN
+   ============================================================ */
+.pricing {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pricing .display--md {
+  margin-bottom: var(--spacing-24);
+}
+
+.plan {
+  margin-top: var(--spacing-60);
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.45);
+  padding: var(--spacing-36);
+  text-align: left;
+}
+
+.plan__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding-bottom: var(--spacing-24);
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: var(--spacing-24);
+}
+
+.plan__label {
+  font-size: var(--text-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-plum-voltage);
+}
+
+.plan__price {
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-extralight);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--color-bone);
+}
+
+.plan__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-30);
+}
+
+.plan__list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+.plan__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-plum-voltage);
+  transform: rotate(45deg);
+}
+
+.plan__cta {
+  width: 100%;
+}
+
+/* ============================================================
    FOCUS STATES
    ============================================================ */
 a:focus-visible,
@@ -839,6 +924,7 @@ input:focus-visible {
   .features,
   .chat,
   .steps,
+  .pricing,
   .access {
     padding-left: var(--spacing-18);
     padding-right: var(--spacing-18);
