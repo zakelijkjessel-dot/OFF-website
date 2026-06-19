@@ -475,6 +475,21 @@ main {
   grid-column: 1 / -1;
 }
 
+/* Spam honeypot — kept in the DOM for bots, hidden from people */
+#fieldHoney {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+}
+
 .access__input {
   flex: 1 1 240px;
   min-width: 0;

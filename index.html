@@ -240,11 +240,13 @@
         Laat je gegevens achter en we laten je binnen één werkdag zien hoe
         AutoPilotAI voor jouw bedrijf werkt — geen verplichtingen.
       </p>
-      <form class="access__form access__form--grid" id="accessForm" novalidate>
-        <input type="text" class="access__input" id="fieldName" placeholder="Je naam" aria-label="Je naam" autocomplete="name" required />
-        <input type="text" class="access__input" id="fieldCompany" placeholder="Naam autobedrijf" aria-label="Naam autobedrijf" autocomplete="organization" required />
-        <input type="email" class="access__input" id="fieldEmail" placeholder="E-mailadres" aria-label="E-mailadres" autocomplete="email" required />
-        <input type="tel" class="access__input" id="fieldPhone" placeholder="Telefoon / WhatsApp" aria-label="Telefoon of WhatsApp-nummer" autocomplete="tel" required />
+      <form class="access__form access__form--grid" id="accessForm" action="https://formsubmit.co/agency.autopilotai@gmail.com" method="POST" novalidate>
+        <input type="text" class="access__input" id="fieldName" name="Naam" placeholder="Je naam" aria-label="Je naam" autocomplete="name" required />
+        <input type="text" class="access__input" id="fieldCompany" name="Autobedrijf" placeholder="Naam autobedrijf" aria-label="Naam autobedrijf" autocomplete="organization" required />
+        <input type="email" class="access__input" id="fieldEmail" name="E-mail" placeholder="E-mailadres" aria-label="E-mailadres" autocomplete="email" required />
+        <input type="tel" class="access__input" id="fieldPhone" name="Telefoon" placeholder="Telefoon / WhatsApp" aria-label="Telefoon of WhatsApp-nummer" autocomplete="tel" required />
+        <!-- Spam honeypot — left empty by humans -->
+        <input type="text" id="fieldHoney" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <button type="submit" class="btn btn--primary access__submit">DEMO AANVRAGEN</button>
       </form>
       <p class="access__note" id="accessNote" role="status"></p>

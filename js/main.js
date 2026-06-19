@@ -64,30 +64,87 @@
       if (!phoneValid)
         return fail(phone, 'Vul een geldig telefoon- of WhatsApp-nummer in.');
 
-      // Geen backend: open het mailprogramma met de aanvraag,
-      // geadresseerd aan AutoPilotAI.
+      // Honeypot: stilletjes afbreken als een bot het veld invult
+      var honey = document.getElementById('fieldHoney');
+      if (honey && honey.value) return;
+
       var to = 'agency.autopilotai@gmail.com';
-      var subject = 'Demo-aanvraag AutoPilotAI — ' + company.value.trim();
-      var body =
-        'Nieuwe demo-aanvraag via de website:\n\n' +
-        'Naam: ' + name.value.trim() + '\n' +
-        'Autobedrijf: ' + company.value.trim() + '\n' +
-        'E-mail: ' + email.value.trim() + '\n' +
-        'Telefoon / WhatsApp: ' + phone.value.trim() + '\n\n' +
-        'Graag een demo van AutoPilotAI.';
+      var values = {
+        Naam: name.value.trim(),
+        Autobedrijf: company.value.trim(),
+        'E-mail': email.value.trim(),
+        Telefoon: phone.value.trim()
+      };
 
-      var mailto =
-        'mailto:' + to +
-        '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(body);
+      var submitBtn = form.querySelector('.access__submit');
 
-      window.location.href = mailto;
+      function setBusy(busy) {
+        if (!submitBtn) return;
+        submitBtn.disabled = busy;
+        submitBtn.textContent = busy ? 'VERSTUREN…' : 'DEMO AANVRAGEN';
+      }
 
-      note.textContent =
-        'Je mailprogramma opent met je aanvraag — verstuur de mail en we ' +
-        'nemen binnen één werkdag contact met je op.';
-      note.style.color = 'var(--color-bone)';
-      form.reset();
+      // Back-up zodat een lead nooit verloren gaat als de dienst hapert
+      function mailFallback() {
+        var subject = 'Demo-aanvraag AutoPilotAI — ' + values.Autobedrijf;
+        var body =
+          'Nieuwe demo-aanvraag via de website:\n\n' +
+          'Naam: ' + values.Naam + '\n' +
+          'Autobedrijf: ' + values.Autobedrijf + '\n' +
+          'E-mail: ' + values['E-mail'] + '\n' +
+          'Telefoon / WhatsApp: ' + values.Telefoon + '\n\n' +
+          'Graag een demo van AutoPilotAI.';
+        window.location.href =
+          'mailto:' + to +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+      }
+
+      setBusy(true);
+      note.textContent = 'Versturen…';
+      note.style.color = 'var(--color-ash)';
+
+      var payload = {
+        Naam: values.Naam,
+        Autobedrijf: values.Autobedrijf,
+        'E-mail': values['E-mail'],
+        Telefoon: values.Telefoon,
+        _subject: 'Demo-aanvraag AutoPilotAI — ' + values.Autobedrijf,
+        _template: 'table'
+      };
+
+      fetch('https://formsubmit.co/ajax/' + to, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) {
+          return r.json();
+        })
+        .then(function (data) {
+          if (data && (data.success === 'true' || data.success === true)) {
+            note.textContent =
+              'Bedankt! Je aanvraag is verstuurd — we nemen binnen één ' +
+              'werkdag contact met je op.';
+            note.style.color = 'var(--color-bone)';
+            form.reset();
+          } else {
+            throw new Error('submit failed');
+          }
+        })
+        .catch(function () {
+          mailFallback();
+          note.textContent =
+            'We openen je mailprogramma als back-up — verstuur de mail om ' +
+            'je aanvraag af te ronden.';
+          note.style.color = 'var(--color-amber-spark)';
+        })
+        .finally(function () {
+          setBusy(false);
+        });
     });
   }
 })();
