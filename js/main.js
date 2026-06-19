@@ -33,25 +33,39 @@
     });
   }
 
-  /* ---- Access form ---- */
+  /* ---- Demo aanvraag formulier ---- */
   var form = document.getElementById('accessForm');
   var note = document.getElementById('accessNote');
   if (form && note) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var input = document.getElementById('accessEmail');
-      var value = (input.value || '').trim();
-      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-      if (!valid) {
-        note.textContent = 'Please enter a valid work email.';
+      var name = document.getElementById('fieldName');
+      var company = document.getElementById('fieldCompany');
+      var email = document.getElementById('fieldEmail');
+      var phone = document.getElementById('fieldPhone');
+
+      var emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        (email.value || '').trim()
+      );
+      var phoneValid =
+        ((phone.value || '').replace(/[^\d]/g, '').length) >= 8;
+
+      function fail(field, msg) {
+        note.textContent = msg;
         note.style.color = 'var(--color-amber-spark)';
-        input.focus();
-        return;
+        if (field) field.focus();
       }
 
+      if (!(name.value || '').trim()) return fail(name, 'Vul je naam in.');
+      if (!(company.value || '').trim())
+        return fail(company, 'Vul de naam van je autobedrijf in.');
+      if (!emailValid) return fail(email, 'Vul een geldig e-mailadres in.');
+      if (!phoneValid)
+        return fail(phone, 'Vul een geldig telefoon- of WhatsApp-nummer in.');
+
       note.textContent =
-        'You’re on the list — we’ll bring you into the constellation soon.';
+        'Bedankt! We nemen binnen één werkdag contact met je op voor de demo.';
       note.style.color = 'var(--color-bone)';
       form.reset();
     });

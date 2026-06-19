@@ -438,57 +438,6 @@ main {
 }
 
 /* ============================================================
-   TEAM
-   ============================================================ */
-.team {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
-  text-align: center;
-}
-
-.team .display--sm {
-  margin: 0 auto var(--spacing-60);
-}
-
-.team__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-30);
-  max-width: 880px;
-  margin: 0 auto;
-}
-
-.team__member {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-6);
-}
-
-.team__avatar {
-  width: 84px;
-  height: 84px;
-  border-radius: var(--radius);
-  border: 1px solid var(--hairline-strong);
-  background: rgba(128, 82, 255, 0.08);
-  margin-bottom: var(--spacing-12);
-}
-
-.team__name {
-  font-size: var(--text-subheading);
-  font-weight: var(--fw-regular);
-  letter-spacing: 0.025em;
-  color: var(--color-bone);
-}
-
-.team__role {
-  font-size: var(--text-body-sm);
-  letter-spacing: 0.021em;
-  color: var(--color-smoke);
-}
-
-/* ============================================================
    ACCESS / CTA
    ============================================================ */
 .access {
@@ -513,6 +462,17 @@ main {
   max-width: 480px;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.access__form--grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 560px;
+  text-align: left;
+}
+
+.access__form--grid .access__submit {
+  grid-column: 1 / -1;
 }
 
 .access__input {
@@ -577,6 +537,200 @@ main {
   letter-spacing: 0.05em;
   color: var(--color-smoke);
   margin-top: var(--spacing-18);
+}
+
+/* ============================================================
+   LOGO ACCENT
+   ============================================================ */
+.logo__ai {
+  color: var(--color-plum-voltage);
+}
+
+/* ============================================================
+   CHAT DEMO  (split: copy + phone)
+   ============================================================ */
+.chat {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-120) var(--spacing-24);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  align-items: center;
+  gap: var(--spacing-60);
+}
+
+.chat__intro .display--sm {
+  margin-bottom: var(--spacing-24);
+}
+
+.chat__list {
+  list-style: none;
+  margin-top: var(--spacing-30);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.chat__list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: var(--text-body);
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+.chat__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-plum-voltage);
+  transform: rotate(45deg);
+}
+
+/* ---- Phone / thread card ---- */
+.phone {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.55);
+  padding: var(--spacing-18);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-18);
+  max-width: 420px;
+  width: 100%;
+  justify-self: end;
+}
+
+.phone__bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: var(--spacing-12);
+  align-items: center;
+  padding-bottom: var(--spacing-18);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.phone__dot {
+  grid-row: span 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-plum-voltage);
+  background: rgba(128, 82, 255, 0.12);
+}
+
+.phone__title {
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.021em;
+  color: var(--color-bone);
+}
+
+.phone__sub {
+  font-size: var(--text-caption);
+  letter-spacing: 0.021em;
+  color: var(--color-smoke);
+}
+
+.phone__thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.bubble {
+  max-width: 84%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: var(--text-body-sm);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+.bubble--in {
+  align-self: flex-start;
+  border: 1px solid var(--hairline-strong);
+  color: var(--color-bone);
+  border-bottom-left-radius: 6px;
+}
+
+.bubble--out {
+  align-self: flex-end;
+  background: var(--color-plum-voltage);
+  color: var(--color-bone);
+  border-bottom-right-radius: 6px;
+}
+
+/* ============================================================
+   STEPS / WERKWIJZE
+   ============================================================ */
+.steps {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  text-align: center;
+}
+
+.steps__kicker {
+  text-align: center;
+}
+
+.steps__title {
+  margin: 0 auto var(--spacing-60);
+}
+
+.steps__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-36);
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-gap);
+}
+
+.step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-plum-voltage);
+  color: var(--color-plum-voltage);
+  font-size: var(--text-subheading);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--spacing-6);
+}
+
+.step__title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--fw-regular);
+  line-height: 1.3;
+  letter-spacing: 0.021em;
+  color: var(--color-bone);
+}
+
+.step__body {
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+/* ============================================================
+   FEATURES — title helper
+   ============================================================ */
+.features__title {
+  text-align: center;
+  margin: 0 auto var(--spacing-60);
 }
 
 /* ============================================================
@@ -647,9 +801,18 @@ input:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .team__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-36) var(--spacing-30);
+  .chat {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-36);
+  }
+
+  .phone {
+    justify-self: center;
+  }
+
+  .steps__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-36);
   }
 }
 
@@ -674,10 +837,15 @@ input:focus-visible {
 
   .spore,
   .features,
-  .team,
+  .chat,
+  .steps,
   .access {
     padding-left: var(--spacing-18);
     padding-right: var(--spacing-18);
+  }
+
+  .access__form--grid {
+    grid-template-columns: 1fr;
   }
 }
 

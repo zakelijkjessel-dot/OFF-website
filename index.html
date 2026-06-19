@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dala — Your workplace has the answer. Just ask Dala for it.</title>
-  <meta name="description" content="Dala turns scattered company knowledge into instant answers. Stop managing knowledge. Start using it." />
+  <title>AutoPilotAI — Jouw werkplaats, altijd bereikbaar op WhatsApp</title>
+  <meta name="description" content="AutoPilotAI is een AI-chatbot die klanten van autobedrijven en garages via WhatsApp helpt: vragen beantwoorden, afspraken inplannen, auto-intake, prijsindicatie, foto-analyse en meer — automatisch." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M16 5l9 6v10l-9 6-9-6V11z' fill='none' stroke='%238052ff' stroke-width='1.5'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z' fill='none' stroke='%238052ff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -21,24 +21,26 @@
   <!-- ============ NAV ============ -->
   <header class="nav" id="nav">
     <div class="nav__inner">
-      <a class="logo" href="#top" aria-label="Dala home">
+      <a class="logo" href="#top" aria-label="AutoPilotAI home">
         <svg class="logo__mark" width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <path d="M16 4l11 7v10l-11 7-11-7V11z" stroke="var(--color-plum-voltage)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M5 11l11 7 11-7" stroke="var(--color-plum-voltage)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M16 18v10" stroke="var(--color-plum-voltage)" stroke-width="1.5"/>
+          <path d="M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z" stroke="#8052ff" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="12" cy="13" r="1.3" fill="#8052ff"/>
+          <circle cx="16" cy="13" r="1.3" fill="#8052ff"/>
+          <circle cx="20" cy="13" r="1.3" fill="#8052ff"/>
         </svg>
-        <span class="logo__word">Dala</span>
+        <span class="logo__word">AutoPilot<span class="logo__ai">AI</span></span>
       </a>
 
-      <nav class="nav__links" aria-label="Primary">
-        <a href="#manifesto" class="nav__link">MANIFESTO</a>
-        <a href="#team" class="nav__link">TEAM</a>
-        <a href="#blog" class="nav__link">BLOG</a>
+      <nav class="nav__links" aria-label="Hoofdnavigatie">
+        <a href="#features" class="nav__link">FUNCTIES</a>
+        <a href="#werkwijze" class="nav__link">WERKWIJZE</a>
+        <a href="#demo-chat" class="nav__link">VOORBEELD</a>
+        <a href="#contact" class="nav__link">CONTACT</a>
       </nav>
 
-      <a href="#access" class="btn btn--primary nav__cta">REQUEST ACCESS</a>
+      <a href="#contact" class="btn btn--primary nav__cta">DEMO AANVRAGEN</a>
 
-      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <button class="nav__toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false">
         <span></span><span></span>
       </button>
     </div>
@@ -48,21 +50,20 @@
     <!-- ============ HERO ============ -->
     <section class="hero" id="hero">
       <div class="hero__text">
-        <p class="eyebrow">STOP MANAGING KNOWLEDGE. START USING IT.</p>
+        <p class="eyebrow">AI-CHATBOT VOOR AUTOBEDRIJVEN &amp; GARAGES</p>
         <h1 class="display">
-          Your workplace<br />
-          has the answer.<br />
-          Just ask Dala<br />
-          for it.
+          Jouw werkplaats,<br />
+          altijd bereikbaar<br />
+          op WhatsApp.
         </h1>
         <p class="body body--lead">
-          Dala connects every document, thread and decision your team has ever
-          made, then turns it into a single answer the moment you ask. No more
-          digging. No more guessing.
+          AutoPilotAI beantwoordt vragen, plant afspraken in en doet de
+          complete auto-intake — automatisch via WhatsApp. Jij houdt je
+          handen vrij voor het echte werk in de werkplaats.
         </p>
         <div class="hero__actions">
-          <a href="#access" class="btn btn--primary">REQUEST ACCESS</a>
-          <a href="#manifesto" class="link-amber">READ THE MANIFESTO</a>
+          <a href="#contact" class="btn btn--primary">DEMO AANVRAGEN</a>
+          <a href="#demo-chat" class="link-amber">BEKIJK EEN GESPREK</a>
         </div>
       </div>
 
@@ -71,126 +72,176 @@
       </div>
     </section>
 
-    <!-- ============ MANIFESTO / CENTERED SPORE ============ -->
-    <section class="spore" id="manifesto">
+    <!-- ============ INTRO / CENTERED ============ -->
+    <section class="spore" id="intro">
       <div class="spore__icon" aria-hidden="true">
         <svg width="104" height="104" viewBox="0 0 104 104" fill="none">
-          <path d="M52 8l40 25v38L52 96 12 71V33z" stroke="var(--color-lichen)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M12 33l40 25 40-25" stroke="var(--color-lichen)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M52 58v38" stroke="var(--color-lichen)" stroke-width="1.5"/>
-          <circle cx="52" cy="46" r="6" stroke="var(--color-lichen)" stroke-width="1.5"/>
+          <path d="M14 30a12 12 0 0 1 12-12h52a12 12 0 0 1 12 12v26a12 12 0 0 1-12 12H42l-20 16V67a12 12 0 0 1-8-11z" stroke="#15846e" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="40" cy="43" r="2.6" fill="#15846e"/>
+          <circle cx="52" cy="43" r="2.6" fill="#15846e"/>
+          <circle cx="64" cy="43" r="2.6" fill="#15846e"/>
         </svg>
       </div>
-      <p class="eyebrow eyebrow--plum">THE COLLECTIVE MIND</p>
-      <h2 class="display display--md">Unlock collective wisdom.</h2>
+      <p class="eyebrow eyebrow--plum">ALTIJD AAN, NOOIT MOE</p>
+      <h2 class="display display--md">Je beste medewerker<br />werkt 24/7.</h2>
       <p class="body body--center">
-        Every team already holds the answer to its hardest questions — scattered
-        across inboxes, wikis and the memory of whoever was in the room. Dala
-        gathers that intelligence into one living constellation and gives it
-        back to you, instantly, the moment you need it.
+        Geen gemiste telefoontjes, geen volle voicemail. AutoPilotAI staat elke
+        klant direct te woord op het kanaal dat ze tóch al gebruiken: WhatsApp.
+        Van de eerste vraag tot een bevestigde afspraak in jullie agenda.
       </p>
+    </section>
+
+    <!-- ============ CHAT DEMO ============ -->
+    <section class="chat" id="demo-chat">
+      <div class="chat__intro">
+        <p class="eyebrow eyebrow--plum">ZO VOELT HET VOOR DE KLANT</p>
+        <h2 class="display display--sm">Eén gesprek,<br />alles geregeld.</h2>
+        <p class="body">
+          Van kenteken tot bevestiging — de klant hoeft niets te installeren en
+          jij hoeft niets te doen. Dit is een echt voorbeeld van wat AutoPilotAI
+          in één WhatsApp-gesprek afhandelt.
+        </p>
+        <ul class="chat__list">
+          <li>Auto-intake op kenteken</li>
+          <li>Directe prijsindicatie &amp; tijdsinschatting</li>
+          <li>Foto-analyse van schade</li>
+          <li>Afspraak ingepland, mail &amp; herinnering verstuurd</li>
+        </ul>
+      </div>
+
+      <div class="phone" role="img" aria-label="Voorbeeld WhatsApp-gesprek tussen een klant en AutoPilotAI">
+        <div class="phone__bar">
+          <span class="phone__dot" aria-hidden="true"></span>
+          <span class="phone__title">AutoPilotAI</span>
+          <span class="phone__sub">WhatsApp · online</span>
+        </div>
+        <div class="phone__thread">
+          <div class="bubble bubble--in">Hoi, mijn APK is volgende maand verlopen. Kan ik langskomen?</div>
+          <div class="bubble bubble--out">Zeker! Wat is je kenteken? Dan zet ik het meteen goed klaar. 🚗</div>
+          <div class="bubble bubble--in">12-ABC-3</div>
+          <div class="bubble bubble--out">Top — een Volkswagen Golf uit 2018. Een APK is €49 en duurt zo'n 45 min. Zal ik er meteen een kleine beurt bij plannen? Dat scheelt je een tweede bezoek.</div>
+          <div class="bubble bubble--in">Ja doe maar. Voorruit heeft trouwens een sterretje, foto stuur ik even. 📷</div>
+          <div class="bubble bubble--out">Ontvangen! De steenslag zit binnen de zone — meestal te repareren, geen vervanging nodig. Ik reserveer donderdag 10:00. Akkoord?</div>
+          <div class="bubble bubble--in">Perfect 👍</div>
+          <div class="bubble bubble--out">Genoteerd ✅ Je krijgt zo een bevestiging per mail en een dag van tevoren een herinnering.</div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ FEATURES ============ -->
     <section class="features" id="features">
-      <p class="eyebrow eyebrow--plum features__kicker">HOW DALA WORKS</p>
+      <p class="eyebrow eyebrow--plum features__kicker">WAT AUTOPILOTAI DOET</p>
+      <h2 class="display display--sm features__title">Alles wat een klant nodig heeft,<br />zonder dat jij de telefoon pakt.</h2>
       <div class="features__grid">
         <article class="card">
           <span class="card__index">01</span>
-          <h3 class="card__title">Connect everything</h3>
-          <p class="card__body">
-            Link your docs, chat, tickets and drives in minutes. Dala reads
-            across all of it without moving a single file.
-          </p>
+          <h3 class="card__title">Vragen beantwoorden</h3>
+          <p class="card__body">Beantwoordt klantvragen over openingstijden, diensten en mogelijkheden — 24/7, in heldere taal.</p>
         </article>
         <article class="card">
           <span class="card__index">02</span>
-          <h3 class="card__title">Ask in plain words</h3>
-          <p class="card__body">
-            No query syntax, no folders. Ask the way you'd ask a colleague and
-            get a sourced answer in seconds.
-          </p>
+          <h3 class="card__title">Afspraken inplannen</h3>
+          <p class="card__body">Plant werkplaatsafspraken direct in op een vrij moment en zet ze klaar in jullie agenda.</p>
         </article>
         <article class="card">
           <span class="card__index">03</span>
-          <h3 class="card__title">Trust every answer</h3>
-          <p class="card__body">
-            Every response cites where it came from, so you can verify the
-            source and act with confidence.
-          </p>
+          <h3 class="card__title">Herinneringen via WhatsApp</h3>
+          <p class="card__body">Stuurt automatisch een vriendelijke herinnering vooraf, zodat klanten hun afspraak niet vergeten.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">04</span>
+          <h3 class="card__title">Annuleren &amp; verplaatsen</h3>
+          <p class="card__body">Klanten verzetten of annuleren hun afspraak zelf via WhatsApp — de agenda wordt meteen bijgewerkt.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">05</span>
+          <h3 class="card__title">Slimme auto-intake</h3>
+          <p class="card__body">Vraagt naar merk, type, kenteken en de klacht, schat de benodigde werkplaatstijd in en zet alles klaar in jullie agenda.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">06</span>
+          <h3 class="card__title">Prijsindicatie</h3>
+          <p class="card__body">Geeft direct een eerlijke richtprijs voor de klus, zodat de klant meteen weet waar hij aan toe is.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">07</span>
+          <h3 class="card__title">Foto-analyse</h3>
+          <p class="card__body">Analyseert foto's van bijvoorbeeld schade of versleten banden en geeft een eerste inschatting.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">08</span>
+          <h3 class="card__title">Slimme upselling</h3>
+          <p class="card__body">Biedt bij een APK netjes een kleine beurt aan — behulpzaam en nooit opdringerig.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">09</span>
+          <h3 class="card__title">Bevestiging via mail</h3>
+          <p class="card__body">Stuurt na elke afspraak een nette bevestiging per e-mail, met alle details op een rij.</p>
         </article>
       </div>
     </section>
 
-    <!-- ============ TEAM ============ -->
-    <section class="team" id="team">
-      <p class="eyebrow eyebrow--plum">THE PEOPLE</p>
-      <h2 class="display display--sm">Built by a small team<br />obsessed with knowledge.</h2>
-      <div class="team__grid">
-        <div class="team__member">
-          <div class="team__avatar" aria-hidden="true"></div>
-          <p class="team__name">Mara Vesper</p>
-          <p class="team__role">Founder &amp; CEO</p>
+    <!-- ============ WERKWIJZE ============ -->
+    <section class="steps" id="werkwijze">
+      <p class="eyebrow eyebrow--plum steps__kicker">ZO WERKT HET</p>
+      <h2 class="display display--sm steps__title">In drie stappen live.</h2>
+      <div class="steps__grid">
+        <div class="step">
+          <span class="step__num">1</span>
+          <h3 class="step__title">Klant stuurt een WhatsApp</h3>
+          <p class="step__body">Een klant appt jullie nummer met een vraag of een verzoek. Geen app installeren, geen wachttijd.</p>
         </div>
-        <div class="team__member">
-          <div class="team__avatar" aria-hidden="true"></div>
-          <p class="team__name">Idris Calder</p>
-          <p class="team__role">Head of Engineering</p>
+        <div class="step">
+          <span class="step__num">2</span>
+          <h3 class="step__title">De AI handelt het af</h3>
+          <p class="step__body">Vragen, auto-intake, prijsindicatie, foto's en inplannen — AutoPilotAI doet het automatisch en in jullie stijl.</p>
         </div>
-        <div class="team__member">
-          <div class="team__avatar" aria-hidden="true"></div>
-          <p class="team__name">Lena Sørenson</p>
-          <p class="team__role">Design</p>
-        </div>
-        <div class="team__member">
-          <div class="team__avatar" aria-hidden="true"></div>
-          <p class="team__name">Theo Marsh</p>
-          <p class="team__role">Research</p>
+        <div class="step">
+          <span class="step__num">3</span>
+          <h3 class="step__title">Alles staat in jullie agenda</h3>
+          <p class="step__body">De afspraak met auto-info en tijdsinschatting staat klaar. De klant krijgt een bevestiging per mail en een herinnering.</p>
         </div>
       </div>
     </section>
 
-    <!-- ============ ACCESS / CTA ============ -->
-    <section class="access" id="access">
-      <p class="eyebrow eyebrow--plum">EARLY ACCESS</p>
-      <h2 class="display display--md">Just ask Dala.</h2>
+    <!-- ============ CONTACT / DEMO ============ -->
+    <section class="access" id="contact">
+      <p class="eyebrow eyebrow--plum">GRATIS DEMO</p>
+      <h2 class="display display--md">Klaar om nooit<br />meer een klant te missen?</h2>
       <p class="body body--center">
-        We're onboarding teams in small waves. Leave your email and we'll bring
-        you into the constellation.
+        Laat je gegevens achter en we laten je binnen één werkdag zien hoe
+        AutoPilotAI voor jouw bedrijf werkt — geen verplichtingen.
       </p>
-      <form class="access__form" id="accessForm" novalidate>
-        <input
-          type="email"
-          class="access__input"
-          id="accessEmail"
-          placeholder="you@company.com"
-          aria-label="Work email"
-          required
-        />
-        <button type="submit" class="btn btn--primary">REQUEST ACCESS</button>
+      <form class="access__form access__form--grid" id="accessForm" novalidate>
+        <input type="text" class="access__input" id="fieldName" placeholder="Je naam" aria-label="Je naam" autocomplete="name" required />
+        <input type="text" class="access__input" id="fieldCompany" placeholder="Naam autobedrijf" aria-label="Naam autobedrijf" autocomplete="organization" required />
+        <input type="email" class="access__input" id="fieldEmail" placeholder="E-mailadres" aria-label="E-mailadres" autocomplete="email" required />
+        <input type="tel" class="access__input" id="fieldPhone" placeholder="Telefoon / WhatsApp" aria-label="Telefoon of WhatsApp-nummer" autocomplete="tel" required />
+        <button type="submit" class="btn btn--primary access__submit">DEMO AANVRAGEN</button>
       </form>
       <p class="access__note" id="accessNote" role="status"></p>
     </section>
   </main>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="footer" id="blog">
+  <footer class="footer">
     <div class="footer__inner">
-      <a class="logo" href="#top" aria-label="Dala home">
+      <a class="logo" href="#top" aria-label="AutoPilotAI home">
         <svg class="logo__mark" width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <path d="M16 4l11 7v10l-11 7-11-7V11z" stroke="var(--color-bone)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M5 11l11 7 11-7" stroke="var(--color-bone)" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M16 18v10" stroke="var(--color-bone)" stroke-width="1.5"/>
+          <path d="M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="12" cy="13" r="1.3" fill="#ffffff"/>
+          <circle cx="16" cy="13" r="1.3" fill="#ffffff"/>
+          <circle cx="20" cy="13" r="1.3" fill="#ffffff"/>
         </svg>
-        <span class="logo__word">Dala</span>
+        <span class="logo__word">AutoPilot<span class="logo__ai">AI</span></span>
       </a>
       <nav class="footer__links" aria-label="Footer">
-        <a href="#manifesto" class="nav__link">MANIFESTO</a>
-        <a href="#team" class="nav__link">TEAM</a>
-        <a href="#blog" class="nav__link">BLOG</a>
-        <a href="#access" class="nav__link">REQUEST ACCESS</a>
+        <a href="#features" class="nav__link">FUNCTIES</a>
+        <a href="#werkwijze" class="nav__link">WERKWIJZE</a>
+        <a href="#demo-chat" class="nav__link">VOORBEELD</a>
+        <a href="#contact" class="nav__link">DEMO AANVRAGEN</a>
       </nav>
-      <p class="footer__copy">© 2026 Dala. All rights reserved.</p>
+      <p class="footer__copy">© 2026 AutoPilotAI · Slimme WhatsApp-AI voor autobedrijven &amp; garages</p>
     </div>
   </footer>
 
