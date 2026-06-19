@@ -64,8 +64,28 @@
       if (!phoneValid)
         return fail(phone, 'Vul een geldig telefoon- of WhatsApp-nummer in.');
 
+      // Geen backend: open het mailprogramma met de aanvraag,
+      // geadresseerd aan AutoPilotAI.
+      var to = 'agency.autopilotai@gmail.com';
+      var subject = 'Demo-aanvraag AutoPilotAI — ' + company.value.trim();
+      var body =
+        'Nieuwe demo-aanvraag via de website:\n\n' +
+        'Naam: ' + name.value.trim() + '\n' +
+        'Autobedrijf: ' + company.value.trim() + '\n' +
+        'E-mail: ' + email.value.trim() + '\n' +
+        'Telefoon / WhatsApp: ' + phone.value.trim() + '\n\n' +
+        'Graag een demo van AutoPilotAI.';
+
+      var mailto =
+        'mailto:' + to +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+
+      window.location.href = mailto;
+
       note.textContent =
-        'Bedankt! We nemen binnen één werkdag contact met je op voor de demo.';
+        'Je mailprogramma opent met je aanvraag — verstuur de mail en we ' +
+        'nemen binnen één werkdag contact met je op.';
       note.style.color = 'var(--color-bone)';
       form.reset();
     });

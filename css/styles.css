@@ -506,6 +506,17 @@ main {
   min-height: 1.2em;
 }
 
+.access__fallback {
+  margin-top: var(--spacing-12);
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.025em;
+  color: var(--color-smoke);
+}
+
+.access__fallback .link-amber {
+  margin-left: 6px;
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
