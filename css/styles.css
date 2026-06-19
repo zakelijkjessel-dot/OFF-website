@@ -1,0 +1,695 @@
+/* ============================================================
+   Dala — Style Reference implementation
+   Particle cosmos on a void — violet pulse against infinite black
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --color-void: #000000;
+  --color-bone: #ffffff;
+  --color-ash: #bdbdbd;
+  --color-smoke: #9a9a9a;
+  --color-plum-voltage: #8052ff;
+  --color-amber-spark: #ffb829;
+  --color-lichen: #15846e;
+
+  /* Typography — Font Families ('Acronym' substitute: Inter) */
+  --font-acronym: 'Inter', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --text-body-sm: 14px;
+  --text-body: 15px;
+  --text-subheading: 18px;
+  --text-heading-sm: 24px;
+  --text-heading: 36px;
+  --text-heading-lg: 48px;
+  --text-display: 78px;
+  --text-hero: 113px;
+
+  /* Typography — Weights */
+  --fw-extralight: 200;
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Spacing */
+  --spacing-6: 6px;
+  --spacing-12: 12px;
+  --spacing-18: 18px;
+  --spacing-24: 24px;
+  --spacing-30: 30px;
+  --spacing-36: 36px;
+  --spacing-60: 60px;
+  --spacing-96: 96px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 60px;
+  --card-padding: 24px;
+  --element-gap: 15px;
+
+  /* Border Radius */
+  --radius: 24px;
+
+  /* Hairlines */
+  --hairline: rgba(255, 255, 255, 0.1);
+  --hairline-strong: rgba(255, 255, 255, 0.18);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-acronym);
+  font-weight: var(--fw-regular);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- Full-page constellation canvas ---------- */
+#constellation {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+main,
+.nav,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: var(--spacing-18) var(--spacing-24);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav--scrolled {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.nav__inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-30);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  font-weight: var(--fw-semibold);
+  font-size: var(--text-subheading);
+  letter-spacing: 0.01em;
+  color: var(--color-bone);
+}
+
+.logo__mark {
+  display: block;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-30);
+  margin-left: auto;
+}
+
+.nav__link {
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.021em;
+  color: var(--color-smoke);
+  transition: color 0.2s ease;
+}
+
+.nav__link:hover,
+.nav__link:focus-visible {
+  color: var(--color-bone);
+}
+
+.nav__cta {
+  margin-left: var(--spacing-6);
+}
+
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.nav__toggle span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-bone);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav__toggle[aria-expanded='true'] span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+.nav__toggle[aria-expanded='true'] span:last-child {
+  transform: translateY(-3px) rotate(-45deg);
+}
+
+/* ============================================================
+   BUTTONS & LINKS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-acronym);
+  font-weight: var(--fw-semibold);
+  font-size: var(--text-caption);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--color-plum-voltage);
+  color: var(--color-bone);
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  opacity: 0.88;
+}
+
+.link-amber {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-amber-spark);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+  padding-bottom: 2px;
+}
+
+.link-amber:hover,
+.link-amber:focus-visible {
+  border-color: var(--color-amber-spark);
+}
+
+/* ============================================================
+   TYPOGRAPHY HELPERS
+   ============================================================ */
+.eyebrow {
+  font-size: var(--text-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+  margin-bottom: var(--spacing-18);
+}
+
+.eyebrow--plum {
+  color: var(--color-plum-voltage);
+}
+
+.display {
+  font-weight: var(--fw-extralight);
+  font-size: var(--text-hero);
+  line-height: 0.81;
+  letter-spacing: -0.04em;
+  color: var(--color-bone);
+}
+
+.display--md {
+  font-size: var(--text-display);
+  line-height: 0.9;
+}
+
+.display--sm {
+  font-size: var(--text-heading-lg);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.body {
+  font-size: var(--text-body);
+  font-weight: var(--fw-regular);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-bone);
+  max-width: 60ch;
+}
+
+.body--lead {
+  font-size: var(--text-subheading);
+  color: var(--color-ash);
+  max-width: 46ch;
+}
+
+.body--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: var(--color-ash);
+  max-width: 54ch;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+main {
+  display: block;
+}
+
+.hero {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--spacing-60);
+  padding: 140px var(--spacing-24) var(--spacing-96);
+}
+
+.hero__text {
+  max-width: 520px;
+}
+
+.hero .display {
+  margin-bottom: var(--spacing-30);
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-30);
+  margin-top: var(--spacing-36);
+  flex-wrap: wrap;
+}
+
+/* The visual is painted by the fixed canvas behind; keep the column
+   as breathing room so the constellation owns the right half. */
+.hero__visual {
+  min-height: 60vh;
+}
+
+/* ============================================================
+   SPORE / MANIFESTO  (centered composition)
+   ============================================================ */
+.section {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-120) var(--spacing-24);
+}
+
+.spore {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-120) var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.spore__icon {
+  margin-bottom: var(--spacing-36);
+  opacity: 0.95;
+}
+
+.spore .display--md {
+  margin-bottom: var(--spacing-24);
+}
+
+/* ============================================================
+   FEATURES
+   ============================================================ */
+.features {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+}
+
+.features__kicker {
+  text-align: center;
+  margin-bottom: var(--spacing-36);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-24);
+}
+
+.card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-gap);
+  background: rgba(0, 0, 0, 0.3);
+  transition: border-color 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--hairline-strong);
+}
+
+.card__index {
+  font-size: var(--text-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
+  color: var(--color-plum-voltage);
+}
+
+.card__title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--fw-regular);
+  line-height: 1.3;
+  letter-spacing: 0.021em;
+  color: var(--color-bone);
+}
+
+.card__body {
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+/* ============================================================
+   TEAM
+   ============================================================ */
+.team {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  text-align: center;
+}
+
+.team .display--sm {
+  margin: 0 auto var(--spacing-60);
+}
+
+.team__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-30);
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.team__member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+.team__avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: var(--radius);
+  border: 1px solid var(--hairline-strong);
+  background: rgba(128, 82, 255, 0.08);
+  margin-bottom: var(--spacing-12);
+}
+
+.team__name {
+  font-size: var(--text-subheading);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.025em;
+  color: var(--color-bone);
+}
+
+.team__role {
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.021em;
+  color: var(--color-smoke);
+}
+
+/* ============================================================
+   ACCESS / CTA
+   ============================================================ */
+.access {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.access .display--md {
+  margin-bottom: var(--spacing-24);
+}
+
+.access__form {
+  display: flex;
+  gap: var(--spacing-12);
+  margin-top: var(--spacing-36);
+  width: 100%;
+  max-width: 480px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.access__input {
+  flex: 1 1 240px;
+  min-width: 0;
+  font-family: var(--font-acronym);
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.025em;
+  color: var(--color-bone);
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  transition: border-color 0.2s ease;
+}
+
+.access__input::placeholder {
+  color: var(--color-smoke);
+}
+
+.access__input:focus {
+  outline: none;
+  border-color: var(--color-plum-voltage);
+}
+
+.access__note {
+  margin-top: var(--spacing-18);
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.025em;
+  color: var(--color-amber-spark);
+  min-height: 1.2em;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--hairline);
+  padding: var(--spacing-60) var(--spacing-24);
+  margin-top: var(--spacing-60);
+}
+
+.footer__inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-30);
+  flex-wrap: wrap;
+}
+
+.footer__links {
+  display: flex;
+  gap: var(--spacing-30);
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.footer__copy {
+  width: 100%;
+  font-size: var(--text-caption);
+  letter-spacing: 0.05em;
+  color: var(--color-smoke);
+  margin-top: var(--spacing-18);
+}
+
+/* ============================================================
+   FOCUS STATES
+   ============================================================ */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-plum-voltage);
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  :root {
+    --text-hero: 84px;
+    --text-display: 64px;
+  }
+}
+
+@media (max-width: 860px) {
+  .nav__links,
+  .nav__cta {
+    display: none;
+  }
+
+  .nav__toggle {
+    display: flex;
+  }
+
+  .nav--open .nav__inner {
+    flex-wrap: wrap;
+  }
+
+  .nav--open .nav__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-18);
+    width: 100%;
+    margin: var(--spacing-24) 0 var(--spacing-12);
+  }
+
+  .nav--open .nav__link {
+    font-size: var(--text-subheading);
+  }
+
+  .nav--open .nav__cta {
+    display: inline-flex;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 120px;
+    gap: var(--spacing-24);
+  }
+
+  .hero__visual {
+    min-height: 46vh;
+    order: -1;
+  }
+
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-36) var(--spacing-30);
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --text-hero: 58px;
+    --text-display: 46px;
+    --text-heading-lg: 36px;
+  }
+
+  .nav {
+    padding: var(--spacing-12) var(--spacing-18);
+  }
+
+  .hero {
+    padding: 110px var(--spacing-18) var(--spacing-60);
+  }
+
+  .hero__actions {
+    gap: var(--spacing-18);
+  }
+
+  .spore,
+  .features,
+  .team,
+  .access {
+    padding-left: var(--spacing-18);
+    padding-right: var(--spacing-18);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

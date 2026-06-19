@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dala — Your workplace has the answer. Just ask Dala for it.</title>
+  <meta name="description" content="Dala turns scattered company knowledge into instant answers. Stop managing knowledge. Start using it." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M16 5l9 6v10l-9 6-9-6V11z' fill='none' stroke='%238052ff' stroke-width='1.5'/%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Background particle constellation (full-page void) -->
+  <canvas id="constellation" aria-hidden="true"></canvas>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="logo" href="#top" aria-label="Dala home">
+        <svg class="logo__mark" width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M16 4l11 7v10l-11 7-11-7V11z" stroke="var(--color-plum-voltage)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M5 11l11 7 11-7" stroke="var(--color-plum-voltage)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M16 18v10" stroke="var(--color-plum-voltage)" stroke-width="1.5"/>
+        </svg>
+        <span class="logo__word">Dala</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#manifesto" class="nav__link">MANIFESTO</a>
+        <a href="#team" class="nav__link">TEAM</a>
+        <a href="#blog" class="nav__link">BLOG</a>
+      </nav>
+
+      <a href="#access" class="btn btn--primary nav__cta">REQUEST ACCESS</a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <div class="hero__text">
+        <p class="eyebrow">STOP MANAGING KNOWLEDGE. START USING IT.</p>
+        <h1 class="display">
+          Your workplace<br />
+          has the answer.<br />
+          Just ask Dala<br />
+          for it.
+        </h1>
+        <p class="body body--lead">
+          Dala connects every document, thread and decision your team has ever
+          made, then turns it into a single answer the moment you ask. No more
+          digging. No more guessing.
+        </p>
+        <div class="hero__actions">
+          <a href="#access" class="btn btn--primary">REQUEST ACCESS</a>
+          <a href="#manifesto" class="link-amber">READ THE MANIFESTO</a>
+        </div>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <!-- The background canvas shows through here; this anchors layout -->
+      </div>
+    </section>
+
+    <!-- ============ MANIFESTO / CENTERED SPORE ============ -->
+    <section class="spore" id="manifesto">
+      <div class="spore__icon" aria-hidden="true">
+        <svg width="104" height="104" viewBox="0 0 104 104" fill="none">
+          <path d="M52 8l40 25v38L52 96 12 71V33z" stroke="var(--color-lichen)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M12 33l40 25 40-25" stroke="var(--color-lichen)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M52 58v38" stroke="var(--color-lichen)" stroke-width="1.5"/>
+          <circle cx="52" cy="46" r="6" stroke="var(--color-lichen)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <p class="eyebrow eyebrow--plum">THE COLLECTIVE MIND</p>
+      <h2 class="display display--md">Unlock collective wisdom.</h2>
+      <p class="body body--center">
+        Every team already holds the answer to its hardest questions — scattered
+        across inboxes, wikis and the memory of whoever was in the room. Dala
+        gathers that intelligence into one living constellation and gives it
+        back to you, instantly, the moment you need it.
+      </p>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features">
+      <p class="eyebrow eyebrow--plum features__kicker">HOW DALA WORKS</p>
+      <div class="features__grid">
+        <article class="card">
+          <span class="card__index">01</span>
+          <h3 class="card__title">Connect everything</h3>
+          <p class="card__body">
+            Link your docs, chat, tickets and drives in minutes. Dala reads
+            across all of it without moving a single file.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__index">02</span>
+          <h3 class="card__title">Ask in plain words</h3>
+          <p class="card__body">
+            No query syntax, no folders. Ask the way you'd ask a colleague and
+            get a sourced answer in seconds.
+          </p>
+        </article>
+        <article class="card">
+          <span class="card__index">03</span>
+          <h3 class="card__title">Trust every answer</h3>
+          <p class="card__body">
+            Every response cites where it came from, so you can verify the
+            source and act with confidence.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ TEAM ============ -->
+    <section class="team" id="team">
+      <p class="eyebrow eyebrow--plum">THE PEOPLE</p>
+      <h2 class="display display--sm">Built by a small team<br />obsessed with knowledge.</h2>
+      <div class="team__grid">
+        <div class="team__member">
+          <div class="team__avatar" aria-hidden="true"></div>
+          <p class="team__name">Mara Vesper</p>
+          <p class="team__role">Founder &amp; CEO</p>
+        </div>
+        <div class="team__member">
+          <div class="team__avatar" aria-hidden="true"></div>
+          <p class="team__name">Idris Calder</p>
+          <p class="team__role">Head of Engineering</p>
+        </div>
+        <div class="team__member">
+          <div class="team__avatar" aria-hidden="true"></div>
+          <p class="team__name">Lena Sørenson</p>
+          <p class="team__role">Design</p>
+        </div>
+        <div class="team__member">
+          <div class="team__avatar" aria-hidden="true"></div>
+          <p class="team__name">Theo Marsh</p>
+          <p class="team__role">Research</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ACCESS / CTA ============ -->
+    <section class="access" id="access">
+      <p class="eyebrow eyebrow--plum">EARLY ACCESS</p>
+      <h2 class="display display--md">Just ask Dala.</h2>
+      <p class="body body--center">
+        We're onboarding teams in small waves. Leave your email and we'll bring
+        you into the constellation.
+      </p>
+      <form class="access__form" id="accessForm" novalidate>
+        <input
+          type="email"
+          class="access__input"
+          id="accessEmail"
+          placeholder="you@company.com"
+          aria-label="Work email"
+          required
+        />
+        <button type="submit" class="btn btn--primary">REQUEST ACCESS</button>
+      </form>
+      <p class="access__note" id="accessNote" role="status"></p>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" id="blog">
+    <div class="footer__inner">
+      <a class="logo" href="#top" aria-label="Dala home">
+        <svg class="logo__mark" width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M16 4l11 7v10l-11 7-11-7V11z" stroke="var(--color-bone)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M5 11l11 7 11-7" stroke="var(--color-bone)" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M16 18v10" stroke="var(--color-bone)" stroke-width="1.5"/>
+        </svg>
+        <span class="logo__word">Dala</span>
+      </a>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="#manifesto" class="nav__link">MANIFESTO</a>
+        <a href="#team" class="nav__link">TEAM</a>
+        <a href="#blog" class="nav__link">BLOG</a>
+        <a href="#access" class="nav__link">REQUEST ACCESS</a>
+      </nav>
+      <p class="footer__copy">© 2026 Dala. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
