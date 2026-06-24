@@ -189,6 +189,125 @@
     return ps;
   }
 
+  /* ---------- brain silhouette (procedural) ---------- */
+  function brainOutline(cx, cy, rx, ry) {
+    var pts = [];
+    var N = 240;
+    for (var i = 0; i < N; i++) {
+      var a = (i / N) * Math.PI * 2;
+      var topF = Math.max(0, -Math.sin(a)); // 1 at the top
+      var frontF = Math.max(0, -Math.cos(a)); // 1 at the front (left)
+      var bump =
+        0.075 * Math.sin(a * 7) +
+        0.05 * Math.sin(a * 4 + 1.3) +
+        0.035 * Math.sin(a * 12 + 0.5);
+      var rr = 1 + bump * (0.45 + 0.7 * topF) + 0.05 * frontF;
+      // tuck the lower-back in a touch for a brain-ish profile
+      var botBack = Math.max(0, Math.sin(a)) * Math.max(0, Math.cos(a));
+      rr -= 0.12 * botBack;
+      pts.push({ x: cx + Math.cos(a) * rx * rr, y: cy + Math.sin(a) * ry * rr });
+    }
+    return pts;
+  }
+
+  function buildBrain(cssW, cssH) {
+    var maxSide = 460;
+    var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
+    var sw = Math.max(40, Math.round(cssW * scale));
+    var sh = Math.max(40, Math.round(cssH * scale));
+    var cx = sw * 0.52;
+    var cy = sh * 0.45;
+    var rx = sw * 0.37;
+    var ry = sh * 0.33;
+    var pts = brainOutline(cx, cy, rx, ry);
+
+    var off = document.createElement('canvas');
+    off.width = sw;
+    off.height = sh;
+    var c = off.getContext('2d');
+
+    // body
+    c.fillStyle = '#fff';
+    c.beginPath();
+    c.moveTo(pts[0].x, pts[0].y);
+    for (var i = 1; i < pts.length; i++) c.lineTo(pts[i].x, pts[i].y);
+    c.closePath();
+    c.fill();
+
+    // brain stem hanging from the lower-front
+    c.beginPath();
+    c.ellipse(cx - rx * 0.12, cy + ry * 0.96, sw * 0.05, sh * 0.09, 0, 0, Math.PI * 2);
+    c.fill();
+
+    // carve gyri grooves
+    c.globalCompositeOperation = 'destination-out';
+    c.lineCap = 'round';
+    var G = 6;
+    for (var g = 0; g < G; g++) {
+      var gy = cy + ((g / (G - 1)) - 0.5) * ry * 1.5;
+      c.lineWidth = ry * (0.045 + Math.random() * 0.03);
+      c.beginPath();
+      c.moveTo(cx - rx * 0.95, gy + Math.sin(g) * ry * 0.06);
+      c.quadraticCurveTo(cx, gy - ry * 0.14, cx + rx * 0.95, gy + Math.cos(g) * ry * 0.06);
+      c.stroke();
+    }
+    // central fissure
+    c.lineWidth = ry * 0.05;
+    c.beginPath();
+    c.moveTo(cx + rx * 0.1, cy - ry * 0.9);
+    c.quadraticCurveTo(cx + rx * 0.35, cy, cx + rx * 0.12, cy + ry * 0.85);
+    c.stroke();
+    c.globalCompositeOperation = 'source-over';
+
+    // sample filled pixels → body particles
+    var data = c.getImageData(0, 0, sw, sh).data;
+    var gap = 4;
+    var samples = [];
+    for (var y = 0; y < sh; y += gap) {
+      for (var x = 0; x < sw; x += gap) {
+        if (data[(y * sw + x) * 4 + 3] > 128) samples.push({ x: x, y: y });
+      }
+    }
+    for (var s = samples.length - 1; s > 0; s--) {
+      var j = (Math.random() * (s + 1)) | 0;
+      var tmp = samples[s];
+      samples[s] = samples[j];
+      samples[j] = tmp;
+    }
+    if (samples.length > 1400) samples.length = 1400;
+
+    var kx = cssW / sw;
+    var ky = cssH / sh;
+    var ps = [];
+    for (var k = 0; k < samples.length; k++) {
+      var hx = (samples[k].x + rand(-gap, gap)) * kx;
+      var hy = (samples[k].y + rand(-gap, gap)) * ky;
+      var p = { is3D: false, hx: hx, hy: hy, depth: Math.random() };
+      styleParticle(p, clamp01(hy / cssH), false);
+      p.amp = rand(0.6, 2.4);
+      p.sp = rand(0.0004, 0.001);
+      ps.push(p);
+    }
+
+    // bright amber/white contour along the outline (like the reference rim)
+    for (var o = 0; o < pts.length; o += 1) {
+      var ox = pts[o].x * kx;
+      var oy = pts[o].y * ky;
+      var ny = clamp01(pts[o].y / sh);
+      var cp = { is3D: false, hx: ox, hy: oy, depth: rand(0.6, 1) };
+      styleParticle(cp, ny, false);
+      cp.color = ny < 0.5
+        ? (Math.random() < 0.6 ? '#ffb829' : '#ffffff')
+        : (Math.random() < 0.5 ? '#8052ff' : '#ffffff');
+      cp.sizeBase = rand(2.2, 4.6);
+      cp.baseA = rand(0.7, 1);
+      cp.amp = rand(0.5, 1.8);
+      cp.sp = rand(0.0004, 0.001);
+      ps.push(cp);
+    }
+    return ps;
+  }
+
   /* ---------- drifters (2D, scattered around the form) ---------- */
   function addDrifters(ps, cssW, cssH) {
     var n = Math.round(ps.length * 0.13);
@@ -223,6 +342,8 @@
 
     if (v.kind === 'sphere') {
       v.particles = buildSphere(count);
+    } else if (v.kind === 'brain') {
+      v.particles = buildBrain(cssW, cssH);
     } else {
       v.particles = buildSilhouette(v.shapeFn, cssW, cssH);
     }
@@ -353,10 +474,13 @@
   function init() {
     nodes = nodes.map(function (canvas) {
       var shape = canvas.getAttribute('data-shape') || 'sphere';
+      var kind = shape === 'sphere' ? 'sphere'
+        : shape === 'brain' ? 'brain'
+        : 'silhouette';
       return {
         canvas: canvas,
         ctx: canvas.getContext('2d'),
-        kind: shape === 'sphere' ? 'sphere' : 'silhouette',
+        kind: kind,
         shapeFn: SHAPE_FN[shape] || drawBubble,
         particles: [],
         rot: rand(0, Math.PI * 2),
