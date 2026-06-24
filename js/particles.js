@@ -143,170 +143,215 @@
 
   var SHAPE_FN = { bubble: drawBubble };
 
-  function buildSilhouette(fn, cssW, cssH) {
-    var maxSide = 460;
-    var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
-    var sw = Math.max(40, Math.round(cssW * scale));
-    var sh = Math.max(40, Math.round(cssH * scale));
-    var gap = 4;
-
-    var off = document.createElement('canvas');
-    off.width = sw;
-    off.height = sh;
-    var oc = off.getContext('2d');
-    fn(oc, sw, sh);
-    var data = oc.getImageData(0, 0, sw, sh).data;
-
-    var pts = [];
-    for (var y = 0; y < sh; y += gap) {
-      for (var x = 0; x < sw; x += gap) {
-        if (data[(y * sw + x) * 4 + 3] > 128) {
-          pts.push({ x: x, y: y });
-        }
-      }
-    }
-    // shuffle + cap
-    for (var i = pts.length - 1; i > 0; i--) {
-      var j = (Math.random() * (i + 1)) | 0;
-      var t = pts[i];
-      pts[i] = pts[j];
-      pts[j] = t;
-    }
-    if (pts.length > 1500) pts.length = 1500;
-
-    var kx = cssW / sw;
-    var ky = cssH / sh;
-    var ps = [];
-    for (var k = 0; k < pts.length; k++) {
-      var hx = (pts[k].x + rand(-gap, gap)) * kx;
-      var hy = (pts[k].y + rand(-gap, gap)) * ky;
-      var p = { is3D: false, hx: hx, hy: hy, depth: Math.random() };
-      styleParticle(p, clamp01(hy / cssH), false);
-      p.amp = rand(0.8, 3);
-      p.sp = rand(0.0004, 0.0011);
-      ps.push(p);
-    }
-    return ps;
+  /* ---------- bulb silhouette (vector, tilted classic bulb) ---------- */
+  function drawBulb(c, w, h) {
+    c.save();
+    c.translate(w * 0.5, h * 0.5);
+    c.rotate(-0.42);
+    c.fillStyle = '#fff';
+    var R = Math.min(w, h) * 0.23;
+    // glass bulb
+    c.beginPath();
+    c.arc(0, -R * 0.55, R, 0, Math.PI * 2);
+    c.fill();
+    // neck
+    c.beginPath();
+    c.moveTo(-R * 0.62, R * 0.18);
+    c.lineTo(R * 0.62, R * 0.18);
+    c.lineTo(R * 0.46, R * 0.62);
+    c.lineTo(-R * 0.46, R * 0.62);
+    c.closePath();
+    c.fill();
+    // screw base
+    roundRect(c, -R * 0.46, R * 0.62, R * 0.92, R * 0.72, R * 0.1);
+    c.fill();
+    // thread grooves (detail)
+    c.globalCompositeOperation = 'destination-out';
+    c.lineCap = 'round';
+    c.lineWidth = R * 0.08;
+    [0.84, 1.04, 1.24].forEach(function (ty) {
+      c.beginPath();
+      c.moveTo(-R * 0.42, R * ty);
+      c.lineTo(R * 0.42, R * ty);
+      c.stroke();
+    });
+    c.globalCompositeOperation = 'source-over';
+    c.restore();
   }
 
-  /* ---------- brain silhouette (procedural) ---------- */
-  function brainOutline(cx, cy, rx, ry) {
+  /* ---------- procedural brain (vector fallback) ---------- */
+  function drawBrainVector(c, w, h) {
+    var cx = w * 0.52, cy = h * 0.45, rx = w * 0.37, ry = h * 0.33;
     var pts = [];
     var N = 240;
     for (var i = 0; i < N; i++) {
       var a = (i / N) * Math.PI * 2;
-      var topF = Math.max(0, -Math.sin(a)); // 1 at the top
-      var frontF = Math.max(0, -Math.cos(a)); // 1 at the front (left)
+      var topF = Math.max(0, -Math.sin(a));
+      var frontF = Math.max(0, -Math.cos(a));
       var bump =
         0.075 * Math.sin(a * 7) +
         0.05 * Math.sin(a * 4 + 1.3) +
         0.035 * Math.sin(a * 12 + 0.5);
       var rr = 1 + bump * (0.45 + 0.7 * topF) + 0.05 * frontF;
-      // tuck the lower-back in a touch for a brain-ish profile
       var botBack = Math.max(0, Math.sin(a)) * Math.max(0, Math.cos(a));
       rr -= 0.12 * botBack;
       pts.push({ x: cx + Math.cos(a) * rx * rr, y: cy + Math.sin(a) * ry * rr });
     }
-    return pts;
-  }
-
-  function buildBrain(cssW, cssH) {
-    var maxSide = 460;
-    var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
-    var sw = Math.max(40, Math.round(cssW * scale));
-    var sh = Math.max(40, Math.round(cssH * scale));
-    var cx = sw * 0.52;
-    var cy = sh * 0.45;
-    var rx = sw * 0.37;
-    var ry = sh * 0.33;
-    var pts = brainOutline(cx, cy, rx, ry);
-
-    var off = document.createElement('canvas');
-    off.width = sw;
-    off.height = sh;
-    var c = off.getContext('2d');
-
-    // body
     c.fillStyle = '#fff';
     c.beginPath();
     c.moveTo(pts[0].x, pts[0].y);
-    for (var i = 1; i < pts.length; i++) c.lineTo(pts[i].x, pts[i].y);
+    for (var k = 1; k < pts.length; k++) c.lineTo(pts[k].x, pts[k].y);
     c.closePath();
     c.fill();
-
-    // brain stem hanging from the lower-front
     c.beginPath();
-    c.ellipse(cx - rx * 0.12, cy + ry * 0.96, sw * 0.05, sh * 0.09, 0, 0, Math.PI * 2);
+    c.ellipse(cx - rx * 0.12, cy + ry * 0.96, w * 0.05, h * 0.09, 0, 0, Math.PI * 2);
     c.fill();
-
-    // carve gyri grooves
     c.globalCompositeOperation = 'destination-out';
     c.lineCap = 'round';
-    var G = 6;
-    for (var g = 0; g < G; g++) {
-      var gy = cy + ((g / (G - 1)) - 0.5) * ry * 1.5;
+    for (var g = 0; g < 6; g++) {
+      var gy = cy + (g / 5 - 0.5) * ry * 1.5;
       c.lineWidth = ry * (0.045 + Math.random() * 0.03);
       c.beginPath();
       c.moveTo(cx - rx * 0.95, gy + Math.sin(g) * ry * 0.06);
       c.quadraticCurveTo(cx, gy - ry * 0.14, cx + rx * 0.95, gy + Math.cos(g) * ry * 0.06);
       c.stroke();
     }
-    // central fissure
-    c.lineWidth = ry * 0.05;
-    c.beginPath();
-    c.moveTo(cx + rx * 0.1, cy - ry * 0.9);
-    c.quadraticCurveTo(cx + rx * 0.35, cy, cx + rx * 0.12, cy + ry * 0.85);
-    c.stroke();
     c.globalCompositeOperation = 'source-over';
+  }
 
-    // sample filled pixels → body particles
+  /* ---------- brain glyph (accurate, real brain shape) ---------- */
+  function drawBrainEmoji(c, w, h) {
+    c.fillStyle = '#fff';
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.font =
+      Math.round(Math.min(w, h) * 0.92) +
+      'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+    c.fillText('🧠', w / 2, h / 2); // brain
+  }
+
+  /* ---------- build particles from a white silhouette mask ----------
+     Samples the filled region, detects the outline via edge pixels and
+     colours that rim bright (amber/white top → plum/white base), like
+     the reference. Returns null when nothing usable was drawn. */
+  function buildFromMask(drawFn, cssW, cssH) {
+    var maxSide = 480;
+    var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
+    var sw = Math.max(40, Math.round(cssW * scale));
+    var sh = Math.max(40, Math.round(cssH * scale));
+
+    var off = document.createElement('canvas');
+    off.width = sw;
+    off.height = sh;
+    var c = off.getContext('2d');
+    drawFn(c, sw, sh);
     var data = c.getImageData(0, 0, sw, sh).data;
+
+    function filled(x, y) {
+      if (x < 0 || y < 0 || x >= sw || y >= sh) return false;
+      return data[(y * sw + x) * 4 + 3] > 100;
+    }
+
     var gap = 4;
-    var samples = [];
-    for (var y = 0; y < sh; y += gap) {
-      for (var x = 0; x < sw; x += gap) {
-        if (data[(y * sw + x) * 4 + 3] > 128) samples.push({ x: x, y: y });
+    var minX = sw, minY = sh, maxX = 0, maxY = 0, total = 0;
+    var x, y;
+    for (y = 0; y < sh; y += gap) {
+      for (x = 0; x < sw; x += gap) {
+        if (filled(x, y)) {
+          total++;
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
       }
     }
-    for (var s = samples.length - 1; s > 0; s--) {
-      var j = (Math.random() * (s + 1)) | 0;
-      var tmp = samples[s];
-      samples[s] = samples[j];
-      samples[j] = tmp;
-    }
-    if (samples.length > 1400) samples.length = 1400;
+    if (total < 40) return null; // nothing rendered (e.g. missing glyph)
+    var bw = Math.max(1, maxX - minX);
+    var bh = Math.max(1, maxY - minY);
+    var cells = (Math.floor(bw / gap) + 1) * (Math.floor(bh / gap) + 1);
+    if (total / cells > 0.92) return null; // solid rectangle (tofu) → fallback
 
-    var kx = cssW / sw;
-    var ky = cssH / sh;
+    var pad = 0.86;
+    var sf = Math.min((cssW * pad) / bw, (cssH * pad) / bh);
+    var offX = (cssW - bw * sf) / 2 - minX * sf;
+    var offY = (cssH - bh * sf) / 2 - minY * sf;
+
+    var interior = [];
+    var edge = [];
+    for (y = 0; y < sh; y += gap) {
+      for (x = 0; x < sw; x += gap) {
+        if (!filled(x, y)) continue;
+        if (
+          !filled(x - gap, y) || !filled(x + gap, y) ||
+          !filled(x, y - gap) || !filled(x, y + gap)
+        ) {
+          edge.push({ x: x, y: y });
+        } else {
+          interior.push({ x: x, y: y });
+        }
+      }
+    }
+    function shuf(a) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = (Math.random() * (i + 1)) | 0;
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+    }
+    shuf(interior);
+    shuf(edge);
+    if (interior.length > 1300) interior.length = 1300;
+    if (edge.length > 540) edge.length = 540;
+
     var ps = [];
-    for (var k = 0; k < samples.length; k++) {
-      var hx = (samples[k].x + rand(-gap, gap)) * kx;
-      var hy = (samples[k].y + rand(-gap, gap)) * ky;
-      var p = { is3D: false, hx: hx, hy: hy, depth: Math.random() };
-      styleParticle(p, clamp01(hy / cssH), false);
+    var n;
+    for (n = 0; n < interior.length; n++) {
+      var pt = interior[n];
+      var ny = clamp01((pt.y - minY) / bh);
+      var p = {
+        is3D: false,
+        hx: pt.x * sf + offX + rand(-1.5, 1.5),
+        hy: pt.y * sf + offY + rand(-1.5, 1.5),
+        depth: Math.random()
+      };
+      styleParticle(p, ny, false);
       p.amp = rand(0.6, 2.4);
       p.sp = rand(0.0004, 0.001);
       ps.push(p);
     }
-
-    // bright amber/white contour along the outline (like the reference rim)
-    for (var o = 0; o < pts.length; o += 1) {
-      var ox = pts[o].x * kx;
-      var oy = pts[o].y * ky;
-      var ny = clamp01(pts[o].y / sh);
-      var cp = { is3D: false, hx: ox, hy: oy, depth: rand(0.6, 1) };
-      styleParticle(cp, ny, false);
-      cp.color = ny < 0.5
-        ? (Math.random() < 0.6 ? '#ffb829' : '#ffffff')
+    for (n = 0; n < edge.length; n++) {
+      var e = edge[n];
+      var eny = clamp01((e.y - minY) / bh);
+      var cp = {
+        is3D: false,
+        hx: e.x * sf + offX,
+        hy: e.y * sf + offY,
+        depth: rand(0.6, 1)
+      };
+      styleParticle(cp, eny, false);
+      cp.color = eny < 0.5
+        ? (Math.random() < 0.62 ? '#ffb829' : '#ffffff')
         : (Math.random() < 0.5 ? '#8052ff' : '#ffffff');
-      cp.sizeBase = rand(2.2, 4.6);
-      cp.baseA = rand(0.7, 1);
+      cp.sizeBase = rand(2.2, 4.4);
+      cp.baseA = rand(0.72, 1);
       cp.amp = rand(0.5, 1.8);
       cp.sp = rand(0.0004, 0.001);
       ps.push(cp);
     }
     return ps;
   }
+
+  function buildSilhouetteKind(kind, cssW, cssH) {
+    if (kind === 'brain') {
+      return (
+        buildFromMask(drawBrainEmoji, cssW, cssH) ||
+        buildFromMask(drawBrainVector, cssW, cssH)
+      );
+    }
+    if (kind === 'bulb') return buildFromMask(drawBulb, cssW, cssH);
+    return buildFromMask(drawBubble, cssW, cssH);
+  }
+
 
   /* ---------- drifters (2D, scattered around the form) ---------- */
   function addDrifters(ps, cssW, cssH) {
@@ -342,10 +387,8 @@
 
     if (v.kind === 'sphere') {
       v.particles = buildSphere(count);
-    } else if (v.kind === 'brain') {
-      v.particles = buildBrain(cssW, cssH);
     } else {
-      v.particles = buildSilhouette(v.shapeFn, cssW, cssH);
+      v.particles = buildSilhouetteKind(v.kind, cssW, cssH) || [];
     }
     addDrifters(v.particles, cssW, cssH);
 
@@ -474,9 +517,9 @@
   function init() {
     nodes = nodes.map(function (canvas) {
       var shape = canvas.getAttribute('data-shape') || 'sphere';
-      var kind = shape === 'sphere' ? 'sphere'
-        : shape === 'brain' ? 'brain'
-        : 'silhouette';
+      var kind = shape === 'sphere' || shape === 'brain' || shape === 'bulb'
+        ? shape
+        : 'bubble';
       return {
         canvas: canvas,
         ctx: canvas.getContext('2d'),
