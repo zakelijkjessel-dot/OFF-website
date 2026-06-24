@@ -104,7 +104,80 @@
     return ps;
   }
 
-  /* ---------- 2D silhouette sampling ---------- */
+  /* ---------- 3D brain (wrinkled ellipsoid point cloud) ----------
+     A real-brain silhouette with volume: an elongated ellipsoid whose
+     radius is modulated by high-frequency folds (gyri), split by a
+     longitudinal fissure, with a cerebellum lobe and a brain stem.
+     Rendered as a 3D cloud → genuine depth + bumps. */
+  function buildBrain3D(count) {
+    var ps = [];
+    var A = 1.3, B = 0.95, C = 0.95; // front-back, height, depth radii
+
+    for (var i = 0; i < count; i++) {
+      var u = Math.random() * Math.PI * 2;
+      var v = Math.acos(rand(-1, 1));
+      var sinV = Math.sin(v);
+      var dx = sinV * Math.cos(u);
+      var dz = sinV * Math.sin(u);
+      var dy = Math.cos(v); // +1 top, -1 bottom
+
+      // gyri folds — anisotropic high-frequency wrinkles
+      var wr =
+        0.5 * Math.sin(6 * u + 4 * v) +
+        0.32 * Math.sin(9 * v - 3 * u + 1.1) +
+        0.24 * Math.sin(13 * u + 2.0) +
+        0.18 * Math.sin(16 * v + 3 * u);
+      wr *= 0.5; // ~[-1,1]
+      var rmod = 1 + 0.09 * wr;
+
+      // longitudinal fissure: deep groove along the top midline (dz≈0, top)
+      var fissure = Math.exp(-(dz * dz) / (2 * 0.1 * 0.1)) * Math.max(0, dy);
+      rmod -= 0.17 * fissure;
+
+      // cerebellum lobe (lower-back)
+      var cbx = dx - 0.5, cby = dy + 0.62, cbz = dz;
+      rmod += 0.13 * Math.exp(
+        -(cbx * cbx + cby * cby + cbz * cbz) / (2 * 0.24 * 0.24)
+      );
+
+      var rr = rmod * (0.93 + Math.random() * 0.07); // slight shell thickness
+
+      var p = {
+        is3D: true,
+        ox: A * dx * rr,
+        oy: B * dy * rr,
+        oz: C * dz * rr
+      };
+      styleParticle(p, clamp01((1 - dy) / 2), false); // warm top → cool base
+      var ridge = 0.6 + 0.5 * (wr * 0.5 + 0.5); // valleys dim, ridges bright
+      p.baseA = clamp01(p.baseA * ridge);
+      p.sizeBase *= 0.8;
+      p.amp = rand(0.2, 0.9);
+      p.sp = rand(0.0004, 0.001);
+      ps.push(p);
+    }
+
+    // brain stem hanging below
+    var stemN = Math.round(count * 0.025);
+    for (var s = 0; s < stemN; s++) {
+      var t = Math.random();
+      var ang = Math.random() * Math.PI * 2;
+      var rad = 0.1 * (1 - t * 0.4);
+      var sp = {
+        is3D: true,
+        ox: (0.08 + Math.cos(ang) * rad) * A,
+        oy: -(0.9 + t * 0.55) * B,
+        oz: Math.sin(ang) * rad * C
+      };
+      styleParticle(sp, 0.88, false);
+      sp.sizeBase *= 0.8;
+      sp.amp = rand(0.2, 0.7);
+      sp.sp = rand(0.0004, 0.001);
+      ps.push(sp);
+    }
+    return ps;
+  }
+
   function roundRect(c, x, y, w, h, r) {
     c.beginPath();
     c.moveTo(x + r, y);
@@ -421,6 +494,9 @@
 
     if (v.kind === 'sphere') {
       v.particles = buildSphere(count);
+    } else if (v.kind === 'brain') {
+      var bc = Math.round(Math.min(2600, Math.max(1200, area / 130)));
+      v.particles = buildBrain3D(bc);
     } else {
       v.particles = buildSilhouetteKind(v.kind, cssW, cssH) || [];
     }
@@ -475,9 +551,14 @@
     var py = pointer.ny * 12;
     var ps = v.particles;
 
-    var cosR = Math.cos(v.rot);
-    var sinR = Math.sin(v.rot);
-    var tilt = -0.18;
+    // brain gently rocks so the 3D depth reads without losing its profile
+    if (v.kind === 'brain') {
+      v.rot = reduceMotion ? -0.1 : Math.sin(t * 0.00028) * 0.34;
+    }
+    var effRot = v.rot + pointer.nx * (v.kind === 'brain' ? 0.22 : 0);
+    var cosR = Math.cos(effRot);
+    var sinR = Math.sin(effRot);
+    var tilt = -0.16;
     var cosT = Math.cos(tilt);
     var sinT = Math.sin(tilt);
 
@@ -494,9 +575,10 @@
         var float3 = reduceMotion ? 0 : Math.sin(t * p.sp + p.ph) * p.amp;
         fx = v.cx + rx * v.R * persp + px * 0.4 + float3;
         fy = v.cy + ry * v.R * persp + py * 0.4;
-        var depth = (rz2 + 1) / 2; // 0 back → 1 front
-        size = p.sizeBase * persp * (0.7 + 0.5 * depth);
-        alpha = p.baseA * (0.3 + 0.7 * depth);
+        // front of the cloud (smaller rz2) is brighter & larger → real depth
+        var front = clamp01((1.4 - rz2) / 2.8);
+        size = p.sizeBase * persp * (0.62 + 0.62 * front);
+        alpha = p.baseA * (0.2 + 0.8 * front);
       } else {
         fx = p.hx + (reduceMotion ? 0 : Math.sin(t * p.sp + p.ph) * p.amp) +
           px * p.depth;
