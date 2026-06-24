@@ -13,6 +13,16 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z' fill='none' stroke='%238052ff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Three.js (ES modules) for the hero particle car -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 <body>
   <!-- ============ NAV ============ -->
@@ -43,55 +53,17 @@
   </header>
 
   <main id="top">
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="hero">
-      <div class="hero__text">
-        <h1 class="display">Nooit meer<br />een gemiste<br />klant.</h1>
-        <p class="eyebrow eyebrow--amber">WHATSAPP-AI VOOR AUTOBEDRIJVEN &amp; GARAGES</p>
-        <p class="body body--lead">
-          AutoPilotAI staat je klanten 24/7 te woord op WhatsApp — vragen
-          beantwoorden, afspraken inplannen en de complete auto-intake.
-          Volledig automatisch.
+    <!-- ============ HERO — particle car ============ -->
+    <section class="hero-car" id="hero">
+      <canvas id="carCanvas" class="hero-car__canvas" aria-hidden="true"></canvas>
+      <div class="hero-car__overlay">
+        <p class="hero-car__label">AUTOPILOT AI</p>
+        <h1 class="hero-car__title">Je garage,<br />altijd bereikbaar.</h1>
+        <p class="hero-car__sub">
+          Een AI die je klanten 24/7 te woord staat, afspraken inplant en de
+          complete auto-intake doet — automatisch.
         </p>
-        <div class="hero__actions">
-          <a href="#contact" class="btn btn--primary">DEMO AANVRAGEN</a>
-        </div>
-      </div>
-
-      <div class="hero__visual" aria-hidden="true">
-        <canvas class="viz viz--drift" data-shape="drift"></canvas>
-        <div class="hero-phone">
-          <span class="hero-phone__glow"></span>
-          <div class="hero-phone__tilt" id="heroPhone">
-            <div class="hero-phone__float">
-              <div class="hero-phone__device">
-                <span class="hp-notch"></span>
-                <div class="hp-screen">
-                  <div class="hp-bar">
-                    <span class="hp-ava">🤖</span>
-                    <span class="hp-id">
-                      <strong>AutoPilotAI</strong>
-                      <em><i class="hp-dot"></i>online</em>
-                    </span>
-                  </div>
-                  <div class="hp-chat">
-                    <div class="hp-msg hp-msg--ai">Goeiemorgen 👋 Waarmee kan ik je helpen?</div>
-                    <div class="hp-msg hp-msg--me">APK voor m'n Golf?</div>
-                    <div class="hp-msg hp-msg--ai">Zeker! Vrijdag 10:00 is vrij — €45,-. Zal ik 'm vastzetten?</div>
-                    <div class="hp-msg hp-msg--me">Top, doen! 👍</div>
-                  </div>
-                  <div class="hp-input">
-                    <span class="hp-field">Typ een bericht…</span>
-                    <span class="hp-send">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 11l17-8-8 17-2-7-7-2z" fill="#fff"/></svg>
-                    </span>
-                  </div>
-                </div>
-                <span class="hp-gloss"></span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <a href="#contact" class="hero-car__cta">Plan een demo</a>
       </div>
     </section>
 
@@ -353,5 +325,6 @@
   <script src="js/particles.js"></script>
   <script src="js/demo.js"></script>
   <script src="js/main.js"></script>
+  <script type="module" src="js/hero-car.js"></script>
 </body>
 </html>

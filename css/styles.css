@@ -662,6 +662,115 @@ a {
 }
 
 /* ============================================================
+   HERO — particle car (warm studio black, burnt sienna accent)
+   ============================================================ */
+.hero-car {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #181310;
+}
+
+.hero-car__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+}
+
+.hero-car__overlay {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  max-width: 560px;
+  padding: 0 var(--spacing-24);
+  margin-left: max(0px, calc((100% - var(--page-max-width)) / 2));
+  pointer-events: none;
+}
+
+.hero-car__overlay > * {
+  pointer-events: auto;
+}
+
+.hero-car__label {
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #c4622d;
+  margin-bottom: var(--spacing-24);
+}
+
+.hero-car__title {
+  font-family: var(--font-acronym);
+  font-weight: 200;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #f0e7d6;
+  margin-bottom: var(--spacing-30);
+}
+
+.hero-car__sub {
+  font-size: var(--text-subheading);
+  font-weight: var(--fw-regular);
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: #bcae9c;
+  max-width: 42ch;
+  margin-bottom: var(--spacing-36);
+}
+
+.hero-car__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-acronym);
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  color: #f0e7d6;
+  background: #c4622d;
+  border-radius: 999px;
+  padding: 15px 30px;
+  transition: transform 0.18s ease, background-color 0.2s ease,
+    box-shadow 0.25s ease;
+  box-shadow: 0 8px 26px rgba(196, 98, 45, 0.35);
+}
+
+.hero-car__cta:hover,
+.hero-car__cta:focus-visible {
+  background: #d4733b;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(196, 98, 45, 0.5);
+}
+
+.hero-car__cta:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (max-width: 860px) {
+  .hero-car__overlay {
+    top: 0;
+    transform: none;
+    margin-left: 0;
+    max-width: 100%;
+    padding-top: 110px;
+    padding-left: var(--spacing-18);
+    padding-right: var(--spacing-18);
+    text-align: left;
+  }
+  .hero-car__sub {
+    max-width: 100%;
+  }
+}
+
+/* ============================================================
    SHOWCASE — constellation left, text right
    ============================================================ */
 .showcase {
