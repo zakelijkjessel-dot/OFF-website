@@ -1,10 +1,10 @@
 /* ============================================================
-   Dala — Style Reference implementation
-   Particle cosmos on a void — violet pulse against infinite black
+   AutoPilotAI — Style system
+   Particle cosmos on a void. Violet pulse against infinite black.
+   Particles live in their OWN visual zones — never behind text.
    ============================================================ */
 
 :root {
-  /* Colors */
   --color-void: #000000;
   --color-bone: #ffffff;
   --color-ash: #bdbdbd;
@@ -13,11 +13,10 @@
   --color-amber-spark: #ffb829;
   --color-lichen: #15846e;
 
-  /* Typography — Font Families ('Acronym' substitute: Inter) */
   --font-acronym: 'Inter', ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Typography — Scale */
+  /* Type scale */
   --text-caption: 12px;
   --text-body-sm: 14px;
   --text-body: 15px;
@@ -26,10 +25,11 @@
   --text-heading: 36px;
   --text-heading-lg: 48px;
   --text-display: 78px;
-  --text-hero: 113px;
+  --text-hero: 90px;
 
-  /* Typography — Weights */
+  /* Weights */
   --fw-extralight: 200;
+  --fw-light: 300;
   --fw-regular: 400;
   --fw-semibold: 600;
   --fw-bold: 700;
@@ -47,19 +47,13 @@
 
   /* Layout */
   --page-max-width: 1200px;
-  --section-gap: 60px;
-  --card-padding: 24px;
-  --element-gap: 15px;
-
-  /* Border Radius */
   --radius: 24px;
 
   /* Hairlines */
   --hairline: rgba(255, 255, 255, 0.1);
-  --hairline-strong: rgba(255, 255, 255, 0.18);
+  --hairline-strong: rgba(255, 255, 255, 0.16);
 }
 
-/* ---------- Reset ---------- */
 *,
 *::before,
 *::after {
@@ -90,21 +84,21 @@ a {
   text-decoration: none;
 }
 
-/* ---------- Full-page constellation canvas ---------- */
-#constellation {
-  position: fixed;
+/* ============================================================
+   VISUAL ZONE — contained particle canvas
+   ============================================================ */
+.viz-wrap {
+  position: relative;
+  min-height: 60vh;
+  width: 100%;
+}
+
+.viz {
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-main,
-.nav,
-.footer {
-  position: relative;
-  z-index: 1;
+  display: block;
 }
 
 /* ============================================================
@@ -117,8 +111,8 @@ main,
   right: 0;
   z-index: 50;
   padding: var(--spacing-18) var(--spacing-24);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
   border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav--scrolled {
@@ -146,8 +140,8 @@ main,
   color: var(--color-bone);
 }
 
-.logo__mark {
-  display: block;
+.logo__ai {
+  color: var(--color-plum-voltage);
 }
 
 .nav__links {
@@ -159,7 +153,6 @@ main,
 
 .nav__link {
   font-size: var(--text-body-sm);
-  font-weight: var(--fw-regular);
   letter-spacing: 0.021em;
   color: var(--color-smoke);
   transition: color 0.2s ease;
@@ -215,10 +208,10 @@ main,
   letter-spacing: 0.05em;
   text-transform: uppercase;
   border-radius: var(--radius);
-  padding: 14px 18px;
+  padding: 14px 20px;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease;
+  transition: transform 0.18s ease, opacity 0.18s ease;
   white-space: nowrap;
 }
 
@@ -233,7 +226,12 @@ main,
 
 .btn--primary:hover,
 .btn--primary:focus-visible {
-  opacity: 0.88;
+  opacity: 0.9;
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: progress;
 }
 
 .link-amber {
@@ -269,73 +267,78 @@ main,
 .eyebrow--plum {
   color: var(--color-plum-voltage);
 }
+.eyebrow--amber {
+  color: var(--color-amber-spark);
+}
 
 .display {
   font-weight: var(--fw-extralight);
   font-size: var(--text-hero);
-  line-height: 0.81;
+  line-height: 0.92;
   letter-spacing: -0.04em;
   color: var(--color-bone);
 }
 
 .display--md {
   font-size: var(--text-display);
-  line-height: 0.9;
+  line-height: 0.95;
 }
 
 .display--sm {
   font-size: var(--text-heading-lg);
-  line-height: 1.1;
-  letter-spacing: -0.04em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .body {
   font-size: var(--text-body);
-  font-weight: var(--fw-regular);
-  line-height: 1.5;
+  line-height: 1.55;
   letter-spacing: 0.025em;
-  color: var(--color-bone);
-  max-width: 60ch;
+  color: var(--color-ash);
+  max-width: 56ch;
 }
 
 .body--lead {
   font-size: var(--text-subheading);
   color: var(--color-ash);
-  max-width: 46ch;
+  max-width: 44ch;
 }
 
 .body--center {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  color: var(--color-ash);
-  max-width: 54ch;
+  max-width: 52ch;
+}
+
+.body + .body {
+  margin-top: var(--spacing-18);
 }
 
 /* ============================================================
-   HERO
+   HERO — text left (clean), constellation right
    ============================================================ */
-main {
-  display: block;
-}
-
 .hero {
   max-width: var(--page-max-width);
   margin: 0 auto;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: var(--spacing-60);
+  gap: var(--spacing-36);
   padding: 140px var(--spacing-24) var(--spacing-96);
 }
 
 .hero__text {
-  max-width: 520px;
+  max-width: 560px;
 }
 
 .hero .display {
-  margin-bottom: var(--spacing-30);
+  margin-bottom: var(--spacing-24);
+}
+
+.hero .eyebrow--amber {
+  margin-bottom: var(--spacing-18);
 }
 
 .hero__actions {
@@ -346,42 +349,283 @@ main {
   flex-wrap: wrap;
 }
 
-/* The visual is painted by the fixed canvas behind; keep the column
-   as breathing room so the constellation owns the right half. */
 .hero__visual {
-  min-height: 60vh;
+  min-height: 70vh;
 }
 
 /* ============================================================
-   SPORE / MANIFESTO  (centered composition)
+   SHOWCASE — constellation left, text right
    ============================================================ */
-.section {
+.showcase {
   max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: var(--spacing-120) var(--spacing-24);
-}
-
-.spore {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-120) var(--spacing-24);
-  display: flex;
-  flex-direction: column;
+  padding: var(--spacing-96) var(--spacing-24);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   align-items: center;
-  text-align: center;
+  gap: var(--spacing-36);
 }
 
-.spore__icon {
-  margin-bottom: var(--spacing-36);
-  opacity: 0.95;
+.showcase__visual {
+  min-height: 56vh;
 }
 
-.spore .display--md {
+.showcase__text {
+  max-width: 460px;
+}
+
+.showcase__text .display--sm {
   margin-bottom: var(--spacing-24);
 }
 
 /* ============================================================
-   FEATURES
+   CHAT DEMO — copy left, phone right
+   ============================================================ */
+.chat {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-96) var(--spacing-24);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  align-items: center;
+  gap: var(--spacing-60);
+}
+
+.chat__intro {
+  max-width: 460px;
+}
+
+.chat__intro .display--sm {
+  margin-bottom: var(--spacing-24);
+}
+
+.chat__list {
+  list-style: none;
+  margin-top: var(--spacing-30);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.chat__list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: var(--text-body);
+  letter-spacing: 0.025em;
+  color: var(--color-bone);
+}
+
+.chat__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-plum-voltage);
+  transform: rotate(45deg);
+}
+
+/* ---- Phone mockup ---- */
+.phone {
+  width: 100%;
+  max-width: 360px;
+  justify-self: end;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 34px;
+  background: #050505;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.phone__top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: 6px 8px 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.phone__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-strong);
+}
+
+.phone__id {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.phone__id strong {
+  font-size: var(--text-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-bone);
+}
+
+.phone__id em {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-style: normal;
+  font-size: var(--text-caption);
+  letter-spacing: 0.02em;
+  color: var(--color-smoke);
+}
+
+.phone__online {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-lichen);
+}
+
+.phone__screen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 6px 10px;
+  max-height: 460px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22px);
+}
+
+.day {
+  align-self: center;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-smoke);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 4px;
+}
+
+.msg {
+  position: relative;
+  max-width: 82%;
+  padding: 8px 12px 18px;
+  border-radius: 16px;
+  font-size: var(--text-body-sm);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.msg p {
+  margin: 0;
+}
+
+.msg__time {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+.msg--in {
+  align-self: flex-start;
+  border: 1px solid var(--hairline-strong);
+  color: var(--color-bone);
+  border-bottom-left-radius: 5px;
+}
+
+.msg--out {
+  align-self: flex-end;
+  background: var(--color-plum-voltage);
+  color: var(--color-bone);
+  border-bottom-right-radius: 5px;
+}
+
+.photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border: 1px dashed var(--hairline-strong);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--color-ash);
+}
+
+.typing {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 16px;
+  border-bottom-left-radius: 5px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-smoke);
+  animation: typing 1.4s infinite ease-in-out;
+}
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.phone__input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 4px 4px 4px 16px;
+}
+
+.phone__field {
+  flex: 1;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: var(--text-body-sm);
+  color: var(--color-smoke);
+}
+
+.phone__send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-plum-voltage);
+  flex: none;
+}
+
+/* ============================================================
+   FEATURES — hairline cards on the void
    ============================================================ */
 .features {
   max-width: var(--page-max-width);
@@ -391,7 +635,12 @@ main {
 
 .features__kicker {
   text-align: center;
-  margin-bottom: var(--spacing-36);
+  margin-bottom: var(--spacing-24);
+}
+
+.features__title {
+  text-align: center;
+  margin: 0 auto var(--spacing-60);
 }
 
 .features__grid {
@@ -403,11 +652,10 @@ main {
 .card {
   border: 1px solid var(--hairline);
   border-radius: var(--radius);
-  padding: var(--card-padding);
+  padding: var(--spacing-30) var(--spacing-24);
   display: flex;
   flex-direction: column;
-  gap: var(--element-gap);
-  background: rgba(0, 0, 0, 0.3);
+  gap: var(--spacing-12);
   transition: border-color 0.25s ease;
 }
 
@@ -438,7 +686,151 @@ main {
 }
 
 /* ============================================================
-   ACCESS / CTA
+   STEPS
+   ============================================================ */
+.steps {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  text-align: center;
+}
+
+.steps__kicker {
+  text-align: center;
+}
+
+.steps__title {
+  margin: 0 auto var(--spacing-60);
+}
+
+.steps__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-36);
+  text-align: left;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-plum-voltage);
+  color: var(--color-plum-voltage);
+  font-size: var(--text-subheading);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--spacing-6);
+}
+
+.step__title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--fw-regular);
+  line-height: 1.3;
+  letter-spacing: 0.021em;
+  color: var(--color-bone);
+}
+
+.step__body {
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+/* ============================================================
+   PRIJZEN
+   ============================================================ */
+.pricing {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pricing .display--md {
+  margin-bottom: var(--spacing-24);
+}
+
+.plan {
+  margin-top: var(--spacing-60);
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  padding: var(--spacing-36);
+  text-align: left;
+}
+
+.plan__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding-bottom: var(--spacing-24);
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: var(--spacing-24);
+}
+
+.plan__label {
+  font-size: var(--text-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-plum-voltage);
+}
+
+.plan__price {
+  font-size: var(--text-heading-lg);
+  font-weight: var(--fw-extralight);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--color-bone);
+}
+
+.plan__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-30);
+}
+
+.plan__list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  color: var(--color-ash);
+}
+
+.plan__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-plum-voltage);
+  transform: rotate(45deg);
+}
+
+.plan__cta {
+  width: 100%;
+}
+
+/* ============================================================
+   CONTACT / DEMO
    ============================================================ */
 .access {
   max-width: var(--page-max-width);
@@ -475,7 +867,6 @@ main {
   grid-column: 1 / -1;
 }
 
-/* Spam honeypot — kept in the DOM for bots, hidden from people */
 #fieldHoney {
   position: absolute;
   left: -9999px;
@@ -485,13 +876,7 @@ main {
   pointer-events: none;
 }
 
-.btn[disabled] {
-  opacity: 0.55;
-  cursor: progress;
-}
-
 .access__input {
-  flex: 1 1 240px;
   min-width: 0;
   font-family: var(--font-acronym);
   font-size: var(--text-body-sm);
@@ -566,285 +951,6 @@ main {
 }
 
 /* ============================================================
-   LOGO ACCENT
-   ============================================================ */
-.logo__ai {
-  color: var(--color-plum-voltage);
-}
-
-/* ============================================================
-   CHAT DEMO  (split: copy + phone)
-   ============================================================ */
-.chat {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-120) var(--spacing-24);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
-  align-items: center;
-  gap: var(--spacing-60);
-}
-
-.chat__intro .display--sm {
-  margin-bottom: var(--spacing-24);
-}
-
-.chat__list {
-  list-style: none;
-  margin-top: var(--spacing-30);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-}
-
-.chat__list li {
-  position: relative;
-  padding-left: 22px;
-  font-size: var(--text-body);
-  letter-spacing: 0.025em;
-  color: var(--color-ash);
-}
-
-.chat__list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 7px;
-  height: 7px;
-  background: var(--color-plum-voltage);
-  transform: rotate(45deg);
-}
-
-/* ---- Phone / thread card ---- */
-.phone {
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.55);
-  padding: var(--spacing-18);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-18);
-  max-width: 420px;
-  width: 100%;
-  justify-self: end;
-}
-
-.phone__bar {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: var(--spacing-12);
-  align-items: center;
-  padding-bottom: var(--spacing-18);
-  border-bottom: 1px solid var(--hairline);
-}
-
-.phone__dot {
-  grid-row: span 2;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--color-plum-voltage);
-  background: rgba(128, 82, 255, 0.12);
-}
-
-.phone__title {
-  font-size: var(--text-body-sm);
-  font-weight: var(--fw-semibold);
-  letter-spacing: 0.021em;
-  color: var(--color-bone);
-}
-
-.phone__sub {
-  font-size: var(--text-caption);
-  letter-spacing: 0.021em;
-  color: var(--color-smoke);
-}
-
-.phone__thread {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-}
-
-.bubble {
-  max-width: 84%;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: var(--text-body-sm);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-}
-
-.bubble--in {
-  align-self: flex-start;
-  border: 1px solid var(--hairline-strong);
-  color: var(--color-bone);
-  border-bottom-left-radius: 6px;
-}
-
-.bubble--out {
-  align-self: flex-end;
-  background: var(--color-plum-voltage);
-  color: var(--color-bone);
-  border-bottom-right-radius: 6px;
-}
-
-/* ============================================================
-   STEPS / WERKWIJZE
-   ============================================================ */
-.steps {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
-  text-align: center;
-}
-
-.steps__kicker {
-  text-align: center;
-}
-
-.steps__title {
-  margin: 0 auto var(--spacing-60);
-}
-
-.steps__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-36);
-  text-align: left;
-}
-
-.step {
-  display: flex;
-  flex-direction: column;
-  gap: var(--element-gap);
-}
-
-.step__num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--color-plum-voltage);
-  color: var(--color-plum-voltage);
-  font-size: var(--text-subheading);
-  font-weight: var(--fw-semibold);
-  margin-bottom: var(--spacing-6);
-}
-
-.step__title {
-  font-size: var(--text-heading-sm);
-  font-weight: var(--fw-regular);
-  line-height: 1.3;
-  letter-spacing: 0.021em;
-  color: var(--color-bone);
-}
-
-.step__body {
-  font-size: var(--text-body);
-  line-height: 1.5;
-  letter-spacing: 0.025em;
-  color: var(--color-ash);
-}
-
-/* ============================================================
-   FEATURES — title helper
-   ============================================================ */
-.features__title {
-  text-align: center;
-  margin: 0 auto var(--spacing-60);
-}
-
-/* ============================================================
-   PRIJZEN
-   ============================================================ */
-.pricing {
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: var(--spacing-60) var(--spacing-24) var(--spacing-120);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.pricing .display--md {
-  margin-bottom: var(--spacing-24);
-}
-
-.plan {
-  margin-top: var(--spacing-60);
-  width: 100%;
-  max-width: 480px;
-  border: 1px solid var(--hairline-strong);
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.45);
-  padding: var(--spacing-36);
-  text-align: left;
-}
-
-.plan__head {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-6);
-  padding-bottom: var(--spacing-24);
-  border-bottom: 1px solid var(--hairline);
-  margin-bottom: var(--spacing-24);
-}
-
-.plan__label {
-  font-size: var(--text-caption);
-  font-weight: var(--fw-semibold);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-plum-voltage);
-}
-
-.plan__price {
-  font-size: var(--text-heading-lg);
-  font-weight: var(--fw-extralight);
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  color: var(--color-bone);
-}
-
-.plan__list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-  margin-bottom: var(--spacing-30);
-}
-
-.plan__list li {
-  position: relative;
-  padding-left: 22px;
-  font-size: var(--text-body);
-  line-height: 1.5;
-  letter-spacing: 0.025em;
-  color: var(--color-ash);
-}
-
-.plan__list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 7px;
-  height: 7px;
-  background: var(--color-plum-voltage);
-  transform: rotate(45deg);
-}
-
-.plan__cta {
-  width: 100%;
-}
-
-/* ============================================================
    FOCUS STATES
    ============================================================ */
 a:focus-visible,
@@ -860,8 +966,9 @@ input:focus-visible {
    ============================================================ */
 @media (max-width: 1024px) {
   :root {
-    --text-hero: 84px;
-    --text-display: 64px;
+    --text-hero: 78px;
+    --text-display: 60px;
+    --text-heading-lg: 42px;
   }
 }
 
@@ -870,15 +977,12 @@ input:focus-visible {
   .nav__cta {
     display: none;
   }
-
   .nav__toggle {
     display: flex;
   }
-
   .nav--open .nav__inner {
     flex-wrap: wrap;
   }
-
   .nav--open .nav__links {
     display: flex;
     flex-direction: column;
@@ -887,11 +991,9 @@ input:focus-visible {
     width: 100%;
     margin: var(--spacing-24) 0 var(--spacing-12);
   }
-
   .nav--open .nav__link {
     font-size: var(--text-subheading);
   }
-
   .nav--open .nav__cta {
     display: inline-flex;
   }
@@ -900,27 +1002,34 @@ input:focus-visible {
     grid-template-columns: 1fr;
     min-height: auto;
     padding-top: 120px;
-    gap: var(--spacing-24);
+    gap: var(--spacing-30);
   }
-
   .hero__visual {
-    min-height: 46vh;
-    order: -1;
+    min-height: 50vh;
+    order: 2;
   }
 
-  .features__grid {
+  .showcase {
     grid-template-columns: 1fr;
+    gap: var(--spacing-30);
+  }
+  .showcase__visual {
+    min-height: 46vh;
+    order: 2;
   }
 
   .chat {
     grid-template-columns: 1fr;
     gap: var(--spacing-36);
+    justify-items: center;
   }
-
   .phone {
     justify-self: center;
   }
 
+  .features__grid {
+    grid-template-columns: 1fr 1fr;
+  }
   .steps__grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-36);
@@ -929,33 +1038,28 @@ input:focus-visible {
 
 @media (max-width: 560px) {
   :root {
-    --text-hero: 58px;
-    --text-display: 46px;
-    --text-heading-lg: 36px;
+    --text-hero: 56px;
+    --text-display: 44px;
+    --text-heading-lg: 34px;
   }
-
   .nav {
     padding: var(--spacing-12) var(--spacing-18);
   }
-
   .hero {
-    padding: 110px var(--spacing-18) var(--spacing-60);
+    padding: 104px var(--spacing-18) var(--spacing-60);
   }
-
-  .hero__actions {
-    gap: var(--spacing-18);
-  }
-
-  .spore,
-  .features,
+  .showcase,
   .chat,
+  .features,
   .steps,
   .pricing,
   .access {
     padding-left: var(--spacing-18);
     padding-right: var(--spacing-18);
   }
-
+  .features__grid {
+    grid-template-columns: 1fr;
+  }
   .access__form--grid {
     grid-template-columns: 1fr;
   }
@@ -968,7 +1072,9 @@ input:focus-visible {
   html {
     scroll-behavior: auto;
   }
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }

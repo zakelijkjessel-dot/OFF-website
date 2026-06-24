@@ -1,337 +1,363 @@
 /* ============================================================
-   AutoPilotAI — Particle Constellation
-   The constellation IS the brand mark. Two clustered forms drift
-   on the void: an organic "brain" anchored to the hero, and a
-   "spore / dandelion" field anchored behind section two.
-   Micro-shapes (triangles, circles, diamonds, squares) at 2–6px,
-   coloured from the brand palette. Dense in the core, sparse at
-   the edges — emergence, intelligence, collective assembly.
+   AutoPilotAI — Particle Constellations
+   Each visual lives in its OWN <canvas class="viz"> inside its
+   column, so particles never drift over text. Particles sample a
+   silhouette (chat bubble, steering wheel) and assemble into it —
+   dense in the form, sparse drifters around it. The constellation
+   is the brand mark.
    ============================================================ */
 (function () {
   'use strict';
 
-  var canvas = document.getElementById('constellation');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
+  var visers = Array.prototype.slice.call(document.querySelectorAll('.viz'));
+  if (!visers.length) return;
 
   var PALETTE = [
-    { c: '#8052ff', w: 46 }, // Plum Voltage — dominant
-    { c: '#ffffff', w: 34 }, // Bone
-    { c: '#ffb829', w: 11 }, // Amber Spark
-    { c: '#15846e', w: 9 }   // Lichen
+    { c: '#8052ff', w: 44 }, // Plum Voltage — dominant
+    { c: '#ffffff', w: 30 }, // Bone
+    { c: '#ffb829', w: 14 }, // Amber Spark
+    { c: '#15846e', w: 12 }  // Lichen
   ];
-  // Spore tips lean warm/teal for a living, dandelion feel
-  var TIP_PALETTE = [
-    { c: '#ffb829', w: 34 },
-    { c: '#15846e', w: 26 },
-    { c: '#8052ff', w: 22 },
-    { c: '#ffffff', w: 18 }
+  // triangle-heavy, like the reference field
+  var SHAPES = [
+    { s: 'triangle', w: 52 },
+    { s: 'circle', w: 20 },
+    { s: 'diamond', w: 16 },
+    { s: 'square', w: 12 }
   ];
-
-  var SHAPES = ['circle', 'triangle', 'diamond', 'square'];
 
   var reduceMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
   ).matches;
-
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var W = 0,
-    H = 0;
 
-  var clusters = [];
-  var pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  var pointer = { nx: 0, ny: 0, tx: 0, ty: 0 };
 
   /* ---------- helpers ---------- */
   function rand(a, b) {
     return a + Math.random() * (b - a);
   }
 
-  function pickColor(table) {
+  function weighted(table, key) {
     var total = 0,
       i;
     for (i = 0; i < table.length; i++) total += table[i].w;
     var r = Math.random() * total;
     for (i = 0; i < table.length; i++) {
       r -= table[i].w;
-      if (r <= 0) return table[i].c;
+      if (r <= 0) return table[i][key];
     }
-    return table[0].c;
+    return table[0][key];
   }
 
-  function randShape() {
-    return SHAPES[(Math.random() * SHAPES.length) | 0];
+  /* ---------- shape silhouettes (drawn white on offscreen) ---------- */
+  function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
   }
 
-  // Cheap value-ish noise for organic lobing
-  function lobe(x, y, z) {
-    return (
-      Math.sin(x * 2.1 + y * 1.3) * 0.5 +
-      Math.sin(y * 1.7 - z * 2.3) * 0.3 +
-      Math.sin(z * 1.9 + x * 1.1) * 0.2
-    );
+  function drawBubble(c, w, h) {
+    c.fillStyle = '#fff';
+    var bw = w * 0.78;
+    var bh = h * 0.56;
+    var x = (w - bw) / 2;
+    var y = h * 0.16;
+    var r = Math.min(bw, bh) * 0.3;
+    roundRect(c, x, y, bw, bh, r);
+    c.fill();
+    // tail bottom-left
+    c.beginPath();
+    c.moveTo(x + bw * 0.2, y + bh - 2);
+    c.lineTo(x + bw * 0.08, y + bh + h * 0.16);
+    c.lineTo(x + bw * 0.42, y + bh - 2);
+    c.closePath();
+    c.fill();
+    // three dots punched out
+    c.globalCompositeOperation = 'destination-out';
+    var cy = y + bh * 0.5;
+    var dotR = bh * 0.085;
+    [0.34, 0.5, 0.66].forEach(function (fx) {
+      c.beginPath();
+      c.arc(x + bw * fx, cy, dotR, 0, Math.PI * 2);
+      c.fill();
+    });
+    c.globalCompositeOperation = 'source-over';
   }
 
-  function randDir() {
-    var theta = Math.random() * Math.PI * 2;
-    var phi = Math.acos(rand(-1, 1));
-    var sinPhi = Math.sin(phi);
+  function drawWheel(c, w, h) {
+    c.fillStyle = '#fff';
+    var cx = w / 2;
+    var cy = h / 2;
+    var R = Math.min(w, h) * 0.44;
+    var ringW = R * 0.24;
+    // outer ring (annulus)
+    c.beginPath();
+    c.arc(cx, cy, R, 0, Math.PI * 2);
+    c.arc(cx, cy, R - ringW, 0, Math.PI * 2);
+    c.fill('evenodd');
+    // hub
+    c.beginPath();
+    c.arc(cx, cy, R * 0.17, 0, Math.PI * 2);
+    c.fill();
+    // spokes: horizontal bar + lower spoke (3-spoke wheel)
+    var sw = R * 0.13;
+    c.fillRect(cx - R, cy - sw / 2, R * 2, sw);
+    c.fillRect(cx - sw / 2, cy, sw, R);
+  }
+
+  var SHAPE_FN = { bubble: drawBubble, wheel: drawWheel };
+
+  /* ---------- sample filled pixels → points ---------- */
+  function samplePoints(fn, sw, sh, gap) {
+    var off = document.createElement('canvas');
+    off.width = sw;
+    off.height = sh;
+    var oc = off.getContext('2d');
+    fn(oc, sw, sh);
+    var data = oc.getImageData(0, 0, sw, sh).data;
+    var pts = [];
+    for (var y = 0; y < sh; y += gap) {
+      for (var x = 0; x < sw; x += gap) {
+        if (data[(y * sw + x) * 4 + 3] > 128) {
+          pts.push({
+            x: x + rand(-gap * 0.5, gap * 0.5),
+            y: y + rand(-gap * 0.5, gap * 0.5)
+          });
+        }
+      }
+    }
+    return pts;
+  }
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = (Math.random() * (i + 1)) | 0;
+      var t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+
+  /* ---------- build one viser ---------- */
+  function makeParticle(hx, hy, drifter) {
+    var depth = Math.random();
     return {
-      x: sinPhi * Math.cos(theta),
-      y: Math.cos(phi),
-      z: sinPhi * Math.sin(theta)
+      hx: hx,
+      hy: hy,
+      x: 0,
+      y: 0,
+      placed: false,
+      shape: weighted(SHAPES, 's'),
+      color: weighted(PALETTE, 'c'),
+      filled: Math.random() < 0.42,
+      size: drifter ? rand(2, 4) : rand(2.4, 6),
+      depth: depth,
+      amp: drifter ? rand(2, 6) : rand(1, 3.5),
+      sp: rand(0.0004, 0.0011),
+      ph: Math.random() * Math.PI * 2,
+      tw: rand(0.0009, 0.0022),
+      baseA: drifter ? rand(0.12, 0.4) : rand(0.55, 1)
     };
   }
 
-  /* ---------- BRAIN: lobed, slightly elongated sphere ---------- */
-  function buildBrain(count) {
-    var pts = [];
-    for (var i = 0; i < count; i++) {
-      var rr = Math.cbrt(Math.random()); // denser core
-      var d = randDir();
-      var disp = 1 + lobe(d.x * 1.6, d.y * 1.6, d.z * 1.6) * 0.36;
-      var radius = rr * disp;
-      pts.push({
-        x: d.x * radius * 1.16, // elongate → brain silhouette
-        y: d.y * radius * 0.94,
-        z: d.z * radius,
-        shape: randShape(),
-        color: pickColor(PALETTE),
-        size: rand(2, 6) * (1 - radius * 0.34),
-        sp: rand(0.4, 1.4),
-        ph: Math.random() * Math.PI * 2,
-        alpha: 0.34 + (1 - radius) * 0.66
-      });
+  function setupViser(v) {
+    var canvas = v.canvas;
+    var rect = canvas.getBoundingClientRect();
+    var cssW = Math.max(40, rect.width);
+    var cssH = Math.max(40, rect.height);
+
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    v.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    v.cssW = cssW;
+    v.cssH = cssH;
+
+    // sample at a capped internal resolution, then scale to css
+    var maxSide = 480;
+    var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
+    var sw = Math.max(40, Math.round(cssW * scale));
+    var sh = Math.max(40, Math.round(cssH * scale));
+    var gap = 5;
+
+    var pts = samplePoints(v.shapeFn, sw, sh, gap);
+    shuffle(pts);
+    var MAX = 1500;
+    if (pts.length > MAX) pts.length = MAX;
+
+    var kx = cssW / sw;
+    var ky = cssH / sh;
+
+    var particles = [];
+    for (var i = 0; i < pts.length; i++) {
+      particles.push(makeParticle(pts[i].x * kx, pts[i].y * ky, false));
     }
-    return pts;
-  }
-
-  /* ---------- SPORE: core + radial filaments (dandelion) ---------- */
-  function buildSpore(count) {
-    var pts = [];
-    var coreN = Math.round(count * 0.22);
-
-    // glowing core
-    for (var i = 0; i < coreN; i++) {
-      var rr = Math.cbrt(Math.random()) * 0.16;
-      var d = randDir();
-      pts.push({
-        x: d.x * rr,
-        y: d.y * rr,
-        z: d.z * rr,
-        shape: randShape(),
-        color: pickColor(PALETTE),
-        size: rand(2, 4),
-        sp: rand(0.4, 1.2),
-        ph: Math.random() * Math.PI * 2,
-        alpha: 0.85
-      });
+    // sparse drifters scattered around the form
+    var drift = Math.round(particles.length * 0.14);
+    for (var d = 0; d < drift; d++) {
+      particles.push(
+        makeParticle(rand(0, cssW), rand(0, cssH), true)
+      );
     }
 
-    // radial filaments ending in a small floret
-    var remaining = count - coreN;
-    var filaments = Math.max(60, Math.round(remaining / 4));
-    for (var f = 0; f < filaments; f++) {
-      var dir = randDir();
-      var len = rand(0.7, 1);
-      var segs = 3 + ((Math.random() * 3) | 0);
-      for (var s = 0; s < segs; s++) {
-        var t = 0.22 + (s / segs) * (len - 0.22);
-        var isTip = s === segs - 1;
-        // slight jitter so filaments feel organic, not laser-straight
-        var jx = rand(-0.03, 0.03);
-        var jy = rand(-0.03, 0.03);
-        var jz = rand(-0.03, 0.03);
-        pts.push({
-          x: dir.x * t + jx,
-          y: dir.y * t + jy,
-          z: dir.z * t + jz,
-          shape: isTip ? randShape() : 'circle',
-          color: isTip ? pickColor(TIP_PALETTE) : pickColor(PALETTE),
-          size: isTip ? rand(3, 6) : rand(1.6, 3),
-          sp: rand(0.5, 1.6),
-          ph: Math.random() * Math.PI * 2,
-          alpha: isTip ? 0.95 : 0.3 + t * 0.4
-        });
-      }
+    // start scattered (assembles toward home in the loop)
+    for (var p = 0; p < particles.length; p++) {
+      particles[p].x = rand(0, cssW);
+      particles[p].y = rand(0, cssH);
     }
-    return pts;
+    v.particles = particles;
   }
 
-  /* ---------- build clusters ---------- */
-  function buildClusters() {
-    var area = W * H;
-    var total = Math.round(Math.min(1700, Math.max(620, area / 1300)));
-
-    clusters = [
-      {
-        kind: 'brain',
-        anchor: document.getElementById('heroAnchor'),
-        particles: buildBrain(Math.round(total * 0.62)),
-        rot: 0,
-        rotSpeed: 0.0011,
-        tilt: -0.3
-      },
-      {
-        kind: 'spore',
-        anchor: document.getElementById('sporeAnchor'),
-        particles: buildSpore(Math.round(total * 0.38)),
-        rot: 0.6,
-        rotSpeed: 0.0009,
-        tilt: -0.12
-      }
-    ];
-  }
-
-  /* ---------- sizing ---------- */
-  function resize() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    if (!clusters.length) buildClusters();
-  }
-
-  function clusterRadius(kind) {
-    var narrow = W < 860;
-    if (kind === 'brain') {
-      return Math.min(narrow ? W * 0.46 : W * 0.42, H * 0.52);
-    }
-    // spore
-    return Math.min(W, H) * (narrow ? 0.38 : 0.4);
-  }
-
-  // Where on screen a cluster's anchor currently sits
-  function anchorCenter(cluster) {
-    var el = cluster.anchor;
-    if (!el) return { x: W * 0.5, y: H * 0.5, visible: true };
-    var r = el.getBoundingClientRect();
-    var cx = r.left + r.width / 2;
-    var cy = r.top + r.height / 2;
-    var visible = r.bottom > -0.35 * H && r.top < 1.35 * H;
-    return { x: cx, y: cy, visible: visible };
-  }
-
-  /* ---------- draw one micro-shape ---------- */
-  function drawShape(p, sx, sy, size, alpha) {
+  /* ---------- draw a micro-shape ---------- */
+  function drawShape(ctx, p, x, y, size, alpha) {
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = p.color;
+    if (p.filled) ctx.fillStyle = p.color;
+    else {
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 1;
+    }
 
     switch (p.shape) {
       case 'circle':
         ctx.beginPath();
-        ctx.arc(sx, sy, size * 0.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
         break;
       case 'square':
-        ctx.fillRect(sx - size * 0.5, sy - size * 0.5, size, size);
+        ctx.beginPath();
+        ctx.rect(x - size * 0.5, y - size * 0.5, size, size);
         break;
       case 'diamond':
         ctx.beginPath();
-        ctx.moveTo(sx, sy - size * 0.6);
-        ctx.lineTo(sx + size * 0.6, sy);
-        ctx.lineTo(sx, sy + size * 0.6);
-        ctx.lineTo(sx - size * 0.6, sy);
+        ctx.moveTo(x, y - size * 0.62);
+        ctx.lineTo(x + size * 0.62, y);
+        ctx.lineTo(x, y + size * 0.62);
+        ctx.lineTo(x - size * 0.62, y);
         ctx.closePath();
-        ctx.fill();
         break;
-      case 'triangle':
+      default: // triangle
         ctx.beginPath();
-        ctx.moveTo(sx, sy - size * 0.62);
-        ctx.lineTo(sx + size * 0.55, sy + size * 0.42);
-        ctx.lineTo(sx - size * 0.55, sy + size * 0.42);
+        ctx.moveTo(x, y - size * 0.64);
+        ctx.lineTo(x + size * 0.58, y + size * 0.44);
+        ctx.lineTo(x - size * 0.58, y + size * 0.44);
         ctx.closePath();
-        ctx.fill();
-        break;
     }
+    if (p.filled) ctx.fill();
+    else ctx.stroke();
   }
 
-  /* ---------- render one cluster ---------- */
-  function renderCluster(cluster, t) {
-    var anchor = anchorCenter(cluster);
-    if (!anchor.visible) return;
+  /* ---------- render one viser ---------- */
+  function renderViser(v, t) {
+    var ctx = v.ctx;
+    ctx.clearRect(0, 0, v.cssW, v.cssH);
 
-    var R = clusterRadius(cluster.kind);
-    var cx = anchor.x + pointer.x * 26;
-    var cy = anchor.y + pointer.y * 16;
+    var px = pointer.nx * 16;
+    var py = pointer.ny * 12;
+    var ps = v.particles;
 
-    var cos = Math.cos(cluster.rot);
-    var sin = Math.sin(cluster.rot);
-    var tilt = cluster.tilt + pointer.y * 0.16;
-    var cosT = Math.cos(tilt);
-    var sinT = Math.sin(tilt);
-
-    var ps = cluster.particles;
     for (var i = 0; i < ps.length; i++) {
       var p = ps[i];
 
-      var breathe = reduceMotion
-        ? 0
-        : Math.sin(t * 0.0006 * p.sp + p.ph) * 0.04;
-      var rscale = (1 + breathe) * R;
+      var fx, fy;
+      if (reduceMotion) {
+        fx = p.hx;
+        fy = p.hy;
+      } else {
+        fx = p.hx + Math.sin(t * p.sp + p.ph) * p.amp + px * p.depth;
+        fy = p.hy + Math.cos(t * p.sp * 0.9 + p.ph) * p.amp + py * p.depth;
+      }
 
-      // rotate around Y
-      var x = p.x * cos - p.z * sin;
-      var z = p.x * sin + p.z * cos;
-      var y = p.y;
+      if (!p.placed) {
+        p.x += (fx - p.x) * 0.07;
+        p.y += (fy - p.y) * 0.07;
+        if (Math.abs(fx - p.x) < 0.6 && Math.abs(fy - p.y) < 0.6) {
+          p.placed = true;
+        }
+      } else {
+        p.x = fx;
+        p.y = fy;
+      }
 
-      // tilt around X for a 3/4 view
-      var y2 = y * cosT - z * sinT;
-      var z2 = y * sinT + z * cosT;
+      var a = reduceMotion
+        ? p.baseA
+        : p.baseA * (0.7 + 0.3 * Math.sin(t * p.tw + p.ph));
+      var size = p.size * (0.72 + 0.55 * p.depth);
 
-      // perspective
-      var persp = 1.9 / (1.9 + z2 * 0.9);
-
-      var sx = cx + x * rscale * persp;
-      var sy = cy + y2 * rscale * persp;
-
-      var size = p.size * persp;
-      if (size < 0.4) continue;
-
-      var depth = (z2 + 1.4) / 2.8; // ~0..1
-      var alpha = p.alpha * (0.4 + depth * 0.6);
-
-      drawShape(p, sx, sy, size, Math.min(1, Math.max(0, alpha)));
-    }
-  }
-
-  /* ---------- main loop ---------- */
-  function render(t) {
-    ctx.clearRect(0, 0, W, H);
-
-    for (var i = 0; i < clusters.length; i++) {
-      renderCluster(clusters[i], t);
+      drawShape(ctx, p, p.x, p.y, size, Math.min(1, Math.max(0, a)));
     }
     ctx.globalAlpha = 1;
+  }
 
-    if (!reduceMotion) {
-      for (var j = 0; j < clusters.length; j++) {
-        clusters[j].rot += clusters[j].rotSpeed;
-      }
-      pointer.x += (pointer.tx - pointer.x) * 0.05;
-      pointer.y += (pointer.ty - pointer.y) * 0.05;
+  function inView(v) {
+    var r = v.canvas.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight;
+  }
+
+  /* ---------- loop ---------- */
+  function frame(t) {
+    for (var i = 0; i < visers.length; i++) {
+      if (inView(visers[i])) renderViser(visers[i], t);
     }
+    if (!reduceMotion) {
+      pointer.nx += (pointer.tx - pointer.nx) * 0.05;
+      pointer.ny += (pointer.ty - pointer.ny) * 0.05;
+    }
+    requestAnimationFrame(frame);
+  }
 
-    requestAnimationFrame(render);
+  /* ---------- init ---------- */
+  function init() {
+    visers = visers.map(function (canvas) {
+      return {
+        canvas: canvas,
+        ctx: canvas.getContext('2d'),
+        shapeFn: SHAPE_FN[canvas.getAttribute('data-shape')] || drawBubble,
+        particles: [],
+        cssW: 0,
+        cssH: 0
+      };
+    });
+    visers.forEach(setupViser);
+
+    if (reduceMotion) {
+      visers.forEach(function (v) {
+        renderViser(v, 0);
+      });
+    } else {
+      requestAnimationFrame(frame);
+    }
   }
 
   /* ---------- events ---------- */
-  function onPointer(e) {
-    pointer.tx = (e.clientX / W) * 2 - 1;
-    pointer.ty = (e.clientY / H) * 2 - 1;
-  }
+  var resizeTimer;
+  window.addEventListener(
+    'resize',
+    function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        visers.forEach(setupViser);
+        if (reduceMotion) {
+          visers.forEach(function (v) {
+            renderViser(v, 0);
+          });
+        }
+      }, 200);
+    },
+    { passive: true }
+  );
 
-  window.addEventListener('resize', resize, { passive: true });
-  window.addEventListener('mousemove', onPointer, { passive: true });
+  window.addEventListener(
+    'mousemove',
+    function (e) {
+      pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+    },
+    { passive: true }
+  );
 
-  resize();
-
-  if (reduceMotion) {
-    render(0); // single static frame
-  } else {
-    requestAnimationFrame(render);
-  }
+  init();
 })();
