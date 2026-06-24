@@ -186,6 +186,23 @@
     }
   }
 
+  /* ---- Hero 3D phone: tilt toward the cursor ---- */
+  var heroPhone = document.getElementById('heroPhone');
+  if (
+    heroPhone &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+    window.matchMedia('(pointer: fine)').matches
+  ) {
+    var baseRY = -20;
+    var baseRX = 7;
+    window.addEventListener('mousemove', function (e) {
+      var nx = (e.clientX / window.innerWidth) * 2 - 1;
+      var ny = (e.clientY / window.innerHeight) * 2 - 1;
+      heroPhone.style.transform =
+        'rotateY(' + (baseRY + nx * 13) + 'deg) rotateX(' + (baseRX - ny * 9) + 'deg)';
+    }, { passive: true });
+  }
+
   /* ---- Click ripple + bounce on primary buttons ---- */
   document.querySelectorAll('.btn--primary').forEach(function (btn) {
     btn.addEventListener('click', function (e) {

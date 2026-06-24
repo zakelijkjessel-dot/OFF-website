@@ -178,6 +178,22 @@
     return ps;
   }
 
+  /* ---------- ambient drift field (sparse, fills its canvas) ---------- */
+  function buildDrift(cssW, cssH) {
+    var ps = [];
+    var n = Math.round(Math.min(360, Math.max(110, (cssW * cssH) / 1600)));
+    for (var i = 0; i < n; i++) {
+      var hx = rand(0, cssW);
+      var hy = rand(0, cssH);
+      var p = { is3D: false, hx: hx, hy: hy, depth: Math.random() };
+      styleParticle(p, clamp01(hy / cssH), true);
+      p.amp = rand(2, 7);
+      p.sp = rand(0.0003, 0.0009);
+      ps.push(p);
+    }
+    return ps;
+  }
+
   function roundRect(c, x, y, w, h, r) {
     c.beginPath();
     c.moveTo(x + r, y);
@@ -497,6 +513,8 @@
     } else if (v.kind === 'brain') {
       var bc = Math.round(Math.min(2600, Math.max(1200, area / 130)));
       v.particles = buildBrain3D(bc);
+    } else if (v.kind === 'drift') {
+      v.particles = buildDrift(cssW, cssH);
     } else {
       v.particles = buildSilhouetteKind(v.kind, cssW, cssH) || [];
     }
@@ -633,9 +651,8 @@
   function init() {
     nodes = nodes.map(function (canvas) {
       var shape = canvas.getAttribute('data-shape') || 'sphere';
-      var kind = shape === 'sphere' || shape === 'brain' || shape === 'bulb'
-        ? shape
-        : 'bubble';
+      var known = ['sphere', 'brain', 'bulb', 'drift'];
+      var kind = known.indexOf(shape) >= 0 ? shape : 'bubble';
       return {
         canvas: canvas,
         ctx: canvas.getContext('2d'),

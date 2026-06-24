@@ -424,7 +424,241 @@ a {
 }
 
 .hero__visual {
+  position: relative;
   min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+}
+
+.viz--drift {
+  z-index: 0;
+}
+
+/* ============================================================
+   HERO 3D PHONE
+   ============================================================ */
+.hero-phone {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-phone__glow {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(128, 82, 255, 0.5) 0%,
+    rgba(128, 82, 255, 0.14) 42%,
+    transparent 70%
+  );
+  filter: blur(18px);
+  z-index: -1;
+}
+
+.hero-phone__tilt {
+  transform-style: preserve-3d;
+  transform: rotateY(-20deg) rotateX(7deg);
+  transition: transform 0.25s ease-out;
+  will-change: transform;
+}
+
+.hero-phone__float {
+  animation: phoneFloat 6.5s ease-in-out infinite;
+}
+
+@keyframes phoneFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+.hero-phone__device {
+  position: relative;
+  width: 264px;
+  height: 545px;
+  border-radius: 44px;
+  padding: 13px;
+  background: linear-gradient(150deg, #34343c 0%, #15151a 44%, #26262d 100%);
+  box-shadow:
+    0 50px 90px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 -3px 7px rgba(0, 0, 0, 0.6);
+}
+
+/* side buttons */
+.hero-phone__device::before {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 150px;
+  width: 3px;
+  height: 62px;
+  border-radius: 3px;
+  background: linear-gradient(#3a3a42, #17171c);
+}
+.hero-phone__device::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 116px;
+  width: 3px;
+  height: 96px;
+  border-radius: 3px;
+  background: linear-gradient(#3a3a42, #17171c);
+}
+
+.hp-notch {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84px;
+  height: 23px;
+  background: #000;
+  border-radius: 14px;
+  z-index: 3;
+}
+.hp-notch::after {
+  content: '';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2f6f5a, #06121a);
+}
+
+.hp-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #0b141a;
+  display: flex;
+  flex-direction: column;
+}
+
+.hp-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 14px 12px;
+  background: linear-gradient(135deg, #0e7a63 0%, #137a5a 100%);
+}
+
+.hp-ava {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.hp-id {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.hp-id strong {
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  color: #fff;
+}
+.hp-id em {
+  font-style: normal;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6ee7a8;
+}
+
+.hp-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 12px;
+  background-color: #0b141a;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.hp-msg {
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #e9edef;
+}
+.hp-msg--ai {
+  align-self: flex-start;
+  background: #202c33;
+  border-bottom-left-radius: 4px;
+}
+.hp-msg--me {
+  align-self: flex-end;
+  background: #156a4e;
+  border-bottom-right-radius: 4px;
+}
+
+.hp-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #0b141a;
+}
+.hp-field {
+  flex: 1;
+  background: #202c33;
+  border-radius: 999px;
+  padding: 8px 13px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.hp-send {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #157a5b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.hp-gloss {
+  position: absolute;
+  inset: 13px;
+  border-radius: 32px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0) 38%
+  );
+  pointer-events: none;
+  z-index: 4;
 }
 
 /* ============================================================
@@ -1150,8 +1384,12 @@ input:focus-visible {
     gap: var(--spacing-30);
   }
   .hero__visual {
-    min-height: 50vh;
+    min-height: auto;
     order: 2;
+    padding: var(--spacing-24) 0;
+  }
+  .hero-phone__tilt {
+    transform: rotateY(-14deg) rotateX(5deg);
   }
 
   .showcase {
@@ -1199,6 +1437,15 @@ input:focus-visible {
   }
   .hero {
     padding: 104px var(--spacing-18) var(--spacing-60);
+  }
+  .hero-phone__device {
+    width: 232px;
+    height: 478px;
+    border-radius: 38px;
+  }
+  .hp-screen,
+  .hp-gloss {
+    border-radius: 28px;
   }
   .showcase,
   .chat,
