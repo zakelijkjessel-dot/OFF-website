@@ -72,98 +72,87 @@
         <p class="eyebrow eyebrow--plum">ALTIJD AAN, NOOIT MOE</p>
         <h2 class="display display--sm">Altijd open.<br />Nooit aan de telefoon.</h2>
         <p class="body">
-          Geen gemiste telefoontjes, geen volle voicemail. Elke klant krijgt
-          meteen antwoord op het kanaal dat hij toch al gebruikt: WhatsApp.
+          Elke klant krijgt meteen antwoord op het kanaal dat hij toch al
+          gebruikt: WhatsApp.
         </p>
         <p class="body">
-          Van de eerste vraag tot een bevestigde afspraak in jullie agenda —
-          in jullie eigen toon, zonder dat je iets hoeft te installeren.
+          Van de eerste vraag tot een bevestigde afspraak in jullie agenda.
+          Jullie volgende medewerker werkt 24/7 en mist nooit een bericht.
         </p>
       </div>
     </section>
 
     <!-- ============ CHAT DEMO ============ -->
     <section class="chat" id="demo-chat">
-      <div class="chat__intro">
-        <p class="eyebrow eyebrow--plum">ZO ZIET JE KLANT HET</p>
-        <h2 class="display display--sm">Eén gesprek,<br />alles geregeld.</h2>
-        <p class="body">
-          Van kenteken tot bevestiging in één WhatsApp-gesprek. Dit is precies
-          wat je klant op zijn scherm ziet.
-        </p>
-        <ul class="chat__list">
-          <li>Auto-intake op kenteken</li>
-          <li>Prijs &amp; wachttijd meteen duidelijk</li>
-          <li>Foto van de schade beoordeeld</li>
-          <li>Ingepland, mail &amp; herinnering verstuurd</li>
-        </ul>
-      </div>
-
-      <div class="phone" role="img" aria-label="Voorbeeld WhatsApp-gesprek tussen een klant en AutoPilotAI">
-        <div class="phone__top">
-          <span class="phone__avatar" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
-              <path d="M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z" stroke="#8052ff" stroke-width="1.6" stroke-linejoin="round"/>
-              <circle cx="12" cy="13" r="1.4" fill="#8052ff"/>
-              <circle cx="16" cy="13" r="1.4" fill="#8052ff"/>
-              <circle cx="20" cy="13" r="1.4" fill="#8052ff"/>
-            </svg>
+      <div class="wa" role="img" aria-label="Voorbeeld WhatsApp-gesprek tussen een klant en AutoPilotAI">
+        <div class="wa__top">
+          <span class="wa__avatar" aria-hidden="true">🤖</span>
+          <span class="wa__id">
+            <strong>AutoPilotAI — Garage Jansen</strong>
+            <em><span class="wa__dot"></span>online</em>
           </span>
-          <span class="phone__id">
-            <strong>AutoPilotAI</strong>
-            <em><span class="phone__online"></span>online</em>
+          <span class="wa__call" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5l2 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 2c.5 2-1 3.5-3 3.5A14 14 0 0 1 3 6.5C3 4.5 4.5 3 6.5 3.5z" stroke="#cfe9df" stroke-width="1.5" stroke-linejoin="round"/></svg>
           </span>
         </div>
 
-        <div class="phone__screen">
-          <div class="day">Vandaag</div>
-
-          <div class="msg msg--in">
-            <p>Hoi, mijn APK is volgende maand verlopen. Kan ik langskomen?</p>
-            <span class="msg__time">09:14</span>
-          </div>
-          <div class="msg msg--out">
-            <p>Zeker! Wat is je kenteken? Dan zet ik het meteen goed klaar. 🚗</p>
-            <span class="msg__time">09:14</span>
-          </div>
-          <div class="msg msg--in">
-            <p>12-ABC-3</p>
-            <span class="msg__time">09:15</span>
-          </div>
-          <div class="msg msg--out">
-            <p>Top — een Volkswagen Golf uit 2018. Een APK is €49 en duurt zo'n 45 min. Zal ik er meteen een kleine beurt bij plannen? Dat scheelt je een tweede bezoek.</p>
-            <span class="msg__time">09:15</span>
-          </div>
-          <div class="msg msg--in">
-            <p>Ja, doe maar. Voorruit heeft trouwens een sterretje.</p>
-            <span class="photo" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M5 17l4-4 3 3 3-4 4 5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-              voorruit.jpg
-            </span>
-            <span class="msg__time">09:16</span>
-          </div>
-          <div class="msg msg--out">
-            <p>Ontvangen! De steenslag zit binnen de zone — meestal te repareren, geen vervanging nodig. Ik reserveer donderdag 10:00. Akkoord?</p>
-            <span class="msg__time">09:16</span>
-          </div>
-          <div class="msg msg--in">
-            <p>Perfect 👍</p>
-            <span class="msg__time">09:17</span>
-          </div>
-          <div class="msg msg--out">
-            <p>Genoteerd ✅ Je krijgt zo een bevestiging per mail en een dag van tevoren een herinnering.</p>
-            <span class="msg__time">09:17</span>
-          </div>
-
-          <div class="typing" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="wa__screen" id="waScreen" aria-live="polite">
+          <div class="wa__day">Vandaag</div>
         </div>
 
-        <div class="phone__input" aria-hidden="true">
-          <span class="phone__field">Bericht</span>
-          <span class="phone__send">
+        <div class="wa__input" aria-hidden="true">
+          <span class="wa__field">Typ een bericht…</span>
+          <span class="wa__send">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 11l17-8-8 17-2-7-7-2z" fill="#fff"/></svg>
           </span>
         </div>
+      </div>
+
+      <div class="chat__timeline">
+        <p class="eyebrow eyebrow--plum">ZO ZIET JE KLANT HET</p>
+        <h2 class="display display--sm">Eén gesprek,<br />alles geregeld.</h2>
+        <p class="timeline__lead">Wat er gebeurt:</p>
+        <ol class="timeline" id="timeline">
+          <li class="tl" data-step="0">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Klant neemt contact op</h3>
+              <p>Stuurt een berichtje via WhatsApp over een APK.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="1">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>AI herkent de intentie</h3>
+              <p>AutoPilotAI begrijpt direct wat de klant wil en vraagt naar het kenteken.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="2">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Auto geïdentificeerd</h3>
+              <p>Kenteken opgezocht — auto, type en prijs worden direct berekend.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="3">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Afspraak ingepland</h3>
+              <p>Klant kiest datum — staat direct in jouw agenda met tijdsinschatting.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="4">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Upselling + bevestiging</h3>
+              <p>Subtiel een extra dienst voorgesteld, bevestiging per mail verstuurd. ✅</p>
+            </div>
+          </li>
+        </ol>
+        <button class="btn btn--primary chat__replay" id="replayDemo" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4v6h6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 10a8 8 0 1 1 1.5 6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Demo opnieuw afspelen
+        </button>
       </div>
     </section>
 
@@ -240,7 +229,7 @@
             <span class="step__num">2</span>
             <div>
               <h3 class="step__title">De AI handelt het af</h3>
-              <p class="step__body">Vragen, auto-intake, prijsindicatie, foto's en inplannen — automatisch en in jullie stijl.</p>
+              <p class="step__body">Vragen, auto-intake, prijsindicatie, foto's, inplannen én slimme upselling — automatisch en in jullie stijl.</p>
             </div>
           </li>
           <li class="step">
@@ -286,8 +275,9 @@
       <p class="eyebrow eyebrow--plum">GRATIS DEMO</p>
       <h2 class="display display--md">Klaar om nooit<br />meer een klant te missen?</h2>
       <p class="body body--center">
-        Laat je gegevens achter en we laten je binnen één werkdag zien hoe
-        AutoPilotAI voor jouw bedrijf werkt — geheel vrijblijvend.
+        Laat je gegevens achter. We nemen binnen 5 werkdagen contact op om
+        samen een afspraak in te plannen voor een duidelijke demonstratie van
+        AutoPilotAI — geheel vrijblijvend.
       </p>
       <form class="access__form access__form--grid" id="accessForm" action="https://formsubmit.co/agency.autopilotai@gmail.com" method="POST" novalidate>
         <input type="text" class="access__input" id="fieldName" name="Naam" placeholder="Je naam" aria-label="Je naam" autocomplete="name" required />
@@ -329,6 +319,7 @@
   </footer>
 
   <script src="js/particles.js"></script>
+  <script src="js/demo.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

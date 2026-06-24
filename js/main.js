@@ -126,10 +126,7 @@
         })
         .then(function (data) {
           if (data && (data.success === 'true' || data.success === true)) {
-            note.textContent =
-              'Bedankt! Je aanvraag is verstuurd — we nemen binnen één ' +
-              'werkdag contact met je op.';
-            note.style.color = 'var(--color-bone)';
+            showThanks(submitBtn);
             form.reset();
           } else {
             throw new Error('submit failed');
@@ -147,4 +144,67 @@
         });
     });
   }
+
+  /* ---- Thank-you message + confetti ---- */
+  function showThanks(originBtn) {
+    if (note) {
+      note.innerHTML =
+        'Bedankt voor uw interesse.<br>' +
+        '<strong>AutoPilotAI</strong> — Uw klantcontact op de automatische piloot.';
+      note.style.color = 'var(--color-bone)';
+    }
+    confettiBurst(originBtn);
+  }
+
+  function confettiBurst(originBtn) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var rect = originBtn
+      ? originBtn.getBoundingClientRect()
+      : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+    var ox = rect.left + rect.width / 2;
+    var oy = rect.top + rect.height / 2;
+    var colors = ['#8052ff', '#ffb829', '#15846e', '#ffffff', '#c44bff'];
+
+    for (var i = 0; i < 26; i++) {
+      var piece = document.createElement('span');
+      piece.className = 'confetti-piece';
+      piece.style.left = ox + 'px';
+      piece.style.top = oy + 'px';
+      piece.style.background = colors[i % colors.length];
+      if (i % 2) piece.style.borderRadius = '50%';
+      var ang = Math.random() * Math.PI * 2;
+      var dist = 60 + Math.random() * 140;
+      piece.style.setProperty('--cx', Math.cos(ang) * dist + 'px');
+      piece.style.setProperty('--cy', (Math.sin(ang) * dist + 120) + 'px');
+      piece.style.setProperty('--cr', Math.random() * 720 - 360 + 'deg');
+      document.body.appendChild(piece);
+      (function (el) {
+        setTimeout(function () {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 1600);
+      })(piece);
+    }
+  }
+
+  /* ---- Click ripple + bounce on primary buttons ---- */
+  document.querySelectorAll('.btn--primary').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      var rect = btn.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height);
+      var ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(function () {
+        if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+      }, 600);
+
+      btn.classList.remove('btn--pop');
+      // reflow so the animation can retrigger
+      void btn.offsetWidth;
+      btn.classList.add('btn--pop');
+    });
+  });
 })();

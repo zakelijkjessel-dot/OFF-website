@@ -228,13 +228,41 @@
       Math.round(Math.min(w, h) * 0.92) +
       'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
     c.fillText('🧠', w / 2, h / 2); // brain
+
+    // carve fold gaps so the particles read as gyri (depth + detail)
+    var cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.42;
+    c.globalCompositeOperation = 'destination-out';
+    c.lineCap = 'round';
+    var g;
+    for (g = 0; g < 5; g++) {
+      var gy = cy + (g / 4 - 0.5) * R * 1.25;
+      c.lineWidth = R * (0.028 + Math.random() * 0.022);
+      c.beginPath();
+      c.moveTo(cx - R, gy);
+      c.bezierCurveTo(
+        cx - R * 0.3, gy - R * 0.18,
+        cx + R * 0.3, gy + R * 0.18,
+        cx + R, gy
+      );
+      c.stroke();
+    }
+    for (g = 0; g < 3; g++) {
+      var gx = cx + (g - 1) * R * 0.52;
+      c.lineWidth = R * 0.024;
+      c.beginPath();
+      c.moveTo(gx, cy - R * 0.72);
+      c.quadraticCurveTo(gx + R * 0.18, cy, gx, cy + R * 0.72);
+      c.stroke();
+    }
+    c.globalCompositeOperation = 'source-over';
   }
 
   /* ---------- build particles from a white silhouette mask ----------
      Samples the filled region, detects the outline via edge pixels and
      colours that rim bright (amber/white top → plum/white base), like
      the reference. Returns null when nothing usable was drawn. */
-  function buildFromMask(drawFn, cssW, cssH) {
+  function buildFromMask(drawFn, cssW, cssH, opts) {
+    opts = opts || {};
     var maxSide = 480;
     var scale = Math.min(1, maxSide / Math.max(cssW, cssH));
     var sw = Math.max(40, Math.round(cssW * scale));
@@ -252,7 +280,8 @@
       return data[(y * sw + x) * 4 + 3] > 100;
     }
 
-    var gap = 4;
+    var gap = opts.gap || 4;
+    var sizeScale = opts.sizeScale || 1;
     var minX = sw, minY = sh, maxX = 0, maxY = 0, total = 0;
     var x, y;
     for (y = 0; y < sh; y += gap) {
@@ -300,8 +329,10 @@
     }
     shuf(interior);
     shuf(edge);
-    if (interior.length > 1300) interior.length = 1300;
-    if (edge.length > 540) edge.length = 540;
+    var interiorMax = opts.interiorMax || 1300;
+    var edgeMax = opts.edgeMax || 540;
+    if (interior.length > interiorMax) interior.length = interiorMax;
+    if (edge.length > edgeMax) edge.length = edgeMax;
 
     var ps = [];
     var n;
@@ -315,6 +346,7 @@
         depth: Math.random()
       };
       styleParticle(p, ny, false);
+      p.sizeBase *= sizeScale;
       p.amp = rand(0.6, 2.4);
       p.sp = rand(0.0004, 0.001);
       ps.push(p);
@@ -332,7 +364,7 @@
       cp.color = eny < 0.5
         ? (Math.random() < 0.62 ? '#ffb829' : '#ffffff')
         : (Math.random() < 0.5 ? '#8052ff' : '#ffffff');
-      cp.sizeBase = rand(2.2, 4.4);
+      cp.sizeBase = rand(2.2, 4.4) * sizeScale;
       cp.baseA = rand(0.72, 1);
       cp.amp = rand(0.5, 1.8);
       cp.sp = rand(0.0004, 0.001);
@@ -343,9 +375,11 @@
 
   function buildSilhouetteKind(kind, cssW, cssH) {
     if (kind === 'brain') {
+      // denser + finer sampling for more detail and depth
+      var brainOpts = { gap: 3, interiorMax: 2100, edgeMax: 700, sizeScale: 0.82 };
       return (
-        buildFromMask(drawBrainEmoji, cssW, cssH) ||
-        buildFromMask(drawBrainVector, cssW, cssH)
+        buildFromMask(drawBrainEmoji, cssW, cssH, brainOpts) ||
+        buildFromMask(drawBrainVector, cssW, cssH, brainOpts)
       );
     }
     if (kind === 'bulb') return buildFromMask(drawBulb, cssW, cssH);
