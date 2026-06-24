@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoPilotAI — WhatsApp-AI voor autobedrijven &amp; garages</title>
+  <meta name="description" content="AutoPilotAI staat je klanten 24/7 te woord op WhatsApp: vragen beantwoorden, afspraken inplannen, auto-intake, prijsindicatie en foto-analyse — automatisch. Nooit meer een gemiste klant." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z' fill='none' stroke='%238052ff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Three.js (ES modules) for the hero particle car -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="logo" href="#top" aria-label="AutoPilotAI home">
+        <svg class="logo__mark" width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z" stroke="#8052ff" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="12" cy="13" r="1.3" fill="#8052ff"/>
+          <circle cx="16" cy="13" r="1.3" fill="#8052ff"/>
+          <circle cx="20" cy="13" r="1.3" fill="#8052ff"/>
+        </svg>
+        <span class="logo__word">AutoPilot<span class="logo__ai">AI</span></span>
+      </a>
+
+      <nav class="nav__links" aria-label="Hoofdnavigatie">
+        <a href="#features" class="nav__link">FUNCTIES</a>
+        <a href="#werkwijze" class="nav__link">WERKWIJZE</a>
+        <a href="#prijzen" class="nav__link">PRIJZEN</a>
+      </nav>
+
+      <a href="#contact" class="btn btn--primary nav__cta">DEMO AANVRAGEN</a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Menu openen" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO — particle car ============ -->
+    <section class="hero-car" id="hero">
+      <canvas id="carCanvas" class="hero-car__canvas" aria-hidden="true"></canvas>
+      <div class="hero-car__overlay">
+        <p class="hero-car__label">AUTOPILOT AI</p>
+        <h1 class="hero-car__title">Je garage,<br />altijd bereikbaar.</h1>
+        <p class="hero-car__sub">
+          Een AI die je klanten 24/7 te woord staat, afspraken inplant en de
+          complete auto-intake doet — automatisch.
+        </p>
+        <a href="#contact" class="hero-car__cta">Plan een demo</a>
+      </div>
+    </section>
+
+    <!-- ============ SHOWCASE (visual left, text right) ============ -->
+    <section class="showcase" id="intro">
+      <div class="showcase__visual viz-wrap" aria-hidden="true">
+        <canvas class="viz" data-shape="bubble"></canvas>
+      </div>
+      <div class="showcase__text">
+        <p class="eyebrow eyebrow--plum">ALTIJD AAN, NOOIT MOE</p>
+        <h2 class="display display--sm">Altijd open.<br />Nooit aan de telefoon.</h2>
+        <p class="body">
+          Elke klant krijgt meteen antwoord op het kanaal dat hij toch al
+          gebruikt: WhatsApp.
+        </p>
+        <p class="body">
+          Van de eerste vraag tot een bevestigde afspraak in jullie agenda.
+          Jullie volgende medewerker werkt 24/7 en mist nooit een bericht.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ CHAT DEMO ============ -->
+    <section class="chat" id="demo-chat">
+      <div class="wa" role="img" aria-label="Voorbeeld WhatsApp-gesprek tussen een klant en AutoPilotAI">
+        <div class="wa__top">
+          <span class="wa__avatar" aria-hidden="true">🤖</span>
+          <span class="wa__id">
+            <strong>AutoPilotAI — Garage Jansen</strong>
+            <em><span class="wa__dot"></span>online</em>
+          </span>
+          <span class="wa__call" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5l2 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 2c.5 2-1 3.5-3 3.5A14 14 0 0 1 3 6.5C3 4.5 4.5 3 6.5 3.5z" stroke="#cfe9df" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+
+        <div class="wa__screen" id="waScreen" aria-live="polite">
+          <div class="wa__day">Vandaag</div>
+        </div>
+
+        <div class="wa__input" aria-hidden="true">
+          <span class="wa__field">Typ een bericht…</span>
+          <span class="wa__send">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 11l17-8-8 17-2-7-7-2z" fill="#fff"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="chat__timeline">
+        <p class="eyebrow eyebrow--plum">ZO ZIET JE KLANT HET</p>
+        <h2 class="display display--sm">Eén gesprek,<br />alles geregeld.</h2>
+        <p class="timeline__lead">Wat er gebeurt:</p>
+        <ol class="timeline" id="timeline">
+          <li class="tl" data-step="0">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Klant neemt contact op</h3>
+              <p>Stuurt een berichtje via WhatsApp over een APK.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="1">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>AI herkent de intentie</h3>
+              <p>AutoPilotAI begrijpt direct wat de klant wil en vraagt naar het kenteken.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="2">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Auto geïdentificeerd</h3>
+              <p>Kenteken opgezocht — auto, type en prijs worden direct berekend.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="3">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Afspraak ingepland</h3>
+              <p>Klant kiest datum — staat direct in jouw agenda met tijdsinschatting.</p>
+            </div>
+          </li>
+          <li class="tl" data-step="4">
+            <span class="tl__dot"></span>
+            <div class="tl__body">
+              <h3>Upselling + bevestiging</h3>
+              <p>Subtiel een extra dienst voorgesteld, bevestiging per mail verstuurd. ✅</p>
+            </div>
+          </li>
+        </ol>
+        <button class="btn btn--primary chat__replay" id="replayDemo" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4v6h6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 10a8 8 0 1 1 1.5 6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Demo opnieuw afspelen
+        </button>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features">
+      <p class="eyebrow eyebrow--plum features__kicker">WAT AUTOPILOTAI DOET</p>
+      <h2 class="display display--sm features__title">Alles wat een klant vraagt,<br />zonder dat jij de telefoon pakt.</h2>
+      <div class="features__grid">
+        <article class="card">
+          <span class="card__index">01</span>
+          <h3 class="card__title">Vragen beantwoorden</h3>
+          <p class="card__body">Openingstijden, diensten, mogelijkheden — heldere antwoorden, 24/7.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">02</span>
+          <h3 class="card__title">Afspraken inplannen</h3>
+          <p class="card__body">Plant op een vrij moment in en zet de afspraak klaar in jullie agenda.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">03</span>
+          <h3 class="card__title">Herinneringen sturen</h3>
+          <p class="card__body">Een vriendelijke WhatsApp-herinnering vooraf — minder no-shows.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">04</span>
+          <h3 class="card__title">Annuleren &amp; verplaatsen</h3>
+          <p class="card__body">Klanten verzetten zelf via WhatsApp; de agenda werkt direct bij.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">05</span>
+          <h3 class="card__title">Slimme auto-intake</h3>
+          <p class="card__body">Vraagt merk, type, kenteken en klacht uit, schat de werkplaatstijd in en zet alles klaar in jullie agenda.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">06</span>
+          <h3 class="card__title">Prijsindicatie</h3>
+          <p class="card__body">Een eerlijke richtprijs vooraf, zodat de klant meteen weet waar hij aan toe is.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">07</span>
+          <h3 class="card__title">Foto-analyse</h3>
+          <p class="card__body">Beoordeelt foto's van schade of versleten banden en geeft een eerste inschatting.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">08</span>
+          <h3 class="card__title">Slimme upselling</h3>
+          <p class="card__body">Biedt bij een APK netjes een kleine beurt aan — behulpzaam, nooit opdringerig.</p>
+        </article>
+        <article class="card">
+          <span class="card__index">09</span>
+          <h3 class="card__title">Bevestiging per mail</h3>
+          <p class="card__body">Na elke afspraak een nette bevestiging per e-mail, met alle details.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ WERKWIJZE ============ -->
+    <section class="steps" id="werkwijze">
+      <div class="steps__visual viz-wrap" aria-hidden="true">
+        <canvas class="viz" data-shape="bulb"></canvas>
+      </div>
+      <div class="steps__content">
+        <p class="eyebrow eyebrow--plum">ZO WERKT HET</p>
+        <h2 class="display display--sm">In drie stappen live.</h2>
+        <ol class="steps__list">
+          <li class="step">
+            <span class="step__num">1</span>
+            <div>
+              <h3 class="step__title">Klant stuurt een WhatsApp</h3>
+              <p class="step__body">Een klant appt jullie nummer met een vraag of verzoek. Geen app installeren, geen wachttijd.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__num">2</span>
+            <div>
+              <h3 class="step__title">De AI handelt het af</h3>
+              <p class="step__body">Vragen, auto-intake, prijsindicatie, foto's, inplannen én slimme upselling — automatisch en in jullie stijl.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__num">3</span>
+            <div>
+              <h3 class="step__title">Alles staat in jullie agenda</h3>
+              <p class="step__body">De afspraak met auto-info en tijdsinschatting staat klaar. De klant krijgt een mail en een herinnering.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ PRIJZEN ============ -->
+    <section class="pricing" id="prijzen">
+      <p class="eyebrow eyebrow--plum">PRIJZEN</p>
+      <h2 class="display display--md">Prijzen op aanvraag.</h2>
+      <p class="body body--center">
+        Elk autobedrijf is anders. We stellen AutoPilotAI af op jouw diensten,
+        agenda en manier van werken — en geven je daarna een heldere prijs.
+        Geen verrassingen.
+      </p>
+
+      <div class="plan">
+        <div class="plan__head">
+          <span class="plan__label">AutoPilotAI · compleet</span>
+          <span class="plan__price">Op aanvraag</span>
+        </div>
+        <ul class="plan__list">
+          <li>Onbeperkt WhatsApp-gesprekken met je klanten</li>
+          <li>Auto-intake op kenteken &amp; koppeling met jullie agenda</li>
+          <li>Prijsindicatie, tijdsinschatting &amp; slimme upselling</li>
+          <li>Foto-analyse van schade en banden</li>
+          <li>Herinneringen via WhatsApp &amp; bevestiging per mail</li>
+          <li>Ingericht in jullie eigen tone of voice</li>
+        </ul>
+        <a href="#contact" class="btn btn--primary plan__cta">VRAAG EEN PRIJS AAN</a>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT / DEMO ============ -->
+    <section class="access" id="contact">
+      <p class="eyebrow eyebrow--plum">GRATIS DEMO</p>
+      <h2 class="display display--md">Klaar om nooit<br />meer een klant te missen?</h2>
+      <p class="body body--center">
+        Laat je gegevens achter. We nemen binnen 5 werkdagen contact op om
+        samen een afspraak in te plannen voor een duidelijke demonstratie van
+        AutoPilotAI — geheel vrijblijvend.
+      </p>
+      <form class="access__form access__form--grid" id="accessForm" action="https://formsubmit.co/agency.autopilotai@gmail.com" method="POST" novalidate>
+        <input type="text" class="access__input" id="fieldName" name="Naam" placeholder="Je naam" aria-label="Je naam" autocomplete="name" required />
+        <input type="text" class="access__input" id="fieldCompany" name="Autobedrijf" placeholder="Naam autobedrijf" aria-label="Naam autobedrijf" autocomplete="organization" required />
+        <input type="email" class="access__input" id="fieldEmail" name="E-mail" placeholder="E-mailadres" aria-label="E-mailadres" autocomplete="email" required />
+        <input type="tel" class="access__input" id="fieldPhone" name="Telefoon" placeholder="Telefoon / WhatsApp" aria-label="Telefoon of WhatsApp-nummer" autocomplete="tel" required />
+        <input type="text" id="fieldHoney" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit" class="btn btn--primary access__submit">DEMO AANVRAGEN</button>
+      </form>
+      <p class="access__note" id="accessNote" role="status"></p>
+      <p class="access__fallback">
+        Liever direct mailen?
+        <a href="mailto:agency.autopilotai@gmail.com" class="link-amber">agency.autopilotai@gmail.com</a>
+      </p>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <a class="logo" href="#top" aria-label="AutoPilotAI home">
+        <svg class="logo__mark" width="22" height="22" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M5 9a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H13l-6 5v-5a4 4 0 0 1-2-3.4z" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="12" cy="13" r="1.3" fill="#ffffff"/>
+          <circle cx="16" cy="13" r="1.3" fill="#ffffff"/>
+          <circle cx="20" cy="13" r="1.3" fill="#ffffff"/>
+        </svg>
+        <span class="logo__word">AutoPilot<span class="logo__ai">AI</span></span>
+      </a>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="#features" class="nav__link">FUNCTIES</a>
+        <a href="#werkwijze" class="nav__link">WERKWIJZE</a>
+        <a href="#demo-chat" class="nav__link">VOORBEELD</a>
+        <a href="#prijzen" class="nav__link">PRIJZEN</a>
+        <a href="#contact" class="nav__link">DEMO AANVRAGEN</a>
+      </nav>
+      <p class="footer__copy">© 2026 AutoPilotAI · Slimme WhatsApp-AI voor autobedrijven &amp; garages</p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/main.js"></script>
+  <script type="module" src="js/hero-car.js"></script>
+</body>
+</html>
